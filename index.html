@@ -203,13 +203,6 @@
             </span>
 
           
-            <span id="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85PostgreSql/" class="post-meta-item leancloud_visitors" data-flag-title="Linux源码编译安装PostgreSql" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
 
         </div>
       </header>
@@ -264,7 +257,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-09-24 00:44:20 / 修改时间：13:28:12" itemprop="dateCreated datePublished" datetime="2021-09-24T00:44:20+08:00">2021-09-24</time>
+              <time title="创建时间：2021-09-24 00:44:20 / 修改时间：15:17:56" itemprop="dateCreated datePublished" datetime="2021-09-24T00:44:20+08:00">2021-09-24</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,13 +270,6 @@
             </span>
 
           
-            <span id="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/" class="post-meta-item leancloud_visitors" data-flag-title="Linux源码编译安装Nginx" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
 
         </div>
       </header>
@@ -298,43 +284,14 @@
 <p>使用wget命令下载nginx，这里以nginx 1.18.0 版本为例</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://nginx.org/download/nginx-1.18.0.tar.gz <span class="comment">#下载</span></span><br><span class="line">tar -zxvf nginx-1.18.0.tar.gz <span class="comment">#解压</span></span><br></pre></td></tr></table></figure>
 <p>或者去<a target="_blank" rel="noopener" href="http://nginx.org/en/download.html">nginx官网下载页面</a>下载安装包，页面如下</p>
-<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924103858604.png" alt="image-20210924103858604"></p>
-<h4 id="2、必要模块安装"><a href="#2、必要模块安装" class="headerlink" title="2、必要模块安装"></a>2、必要模块安装</h4><p>下载PCRE，PCRE - Supports regular expressions. Required by the NGINX <a target="_blank" rel="noopener" href="https://nginx.org/en/docs/ngx_core_module.html">Core</a> and <a target="_blank" rel="noopener" href="https://nginx.org/en/docs/http/ngx_http_rewrite_module.html">Rewrite</a> modules.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://ftp.pcre.org/pub/pcre/pcre-8.44.tar.gz <span class="comment">#下载</span></span><br><span class="line">tar -zxvf pcre-8.44.tar.gz <span class="comment">#解压</span></span><br></pre></td></tr></table></figure>
-<p>下载zlib, zlib - Supports header compression. Required by the NGINX <a target="_blank" rel="noopener" href="https://nginx.org/en/docs/http/ngx_http_gzip_module.html">Gzip</a> module.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http://zlib.net/zlib-1.2.11.tar.gz <span class="comment">#下载</span></span><br><span class="line">tar -zxvf zlib-1.2.11.tar.gz <span class="comment">#解压</span></span><br></pre></td></tr></table></figure>
-<p>可以看到当前文件夹下面有以下文件</p>
-<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924125124462.png" alt="image-20210924125124462"></p>
-<p>接下来我们依次进行编译</p>
-<p>编译pcre-8.44</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> pcre-8.44</span><br><span class="line">./configure</span><br></pre></td></tr></table></figure>
-<p>发现以下报错</p>
-<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924125702614.png" alt="image-20210924125702614"></p>
-<p>原因是没有gcc-c++编译环境，输入以下命令</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install gcc-c++</span><br><span class="line"><span class="comment">#完成安装之后继续编译pcre</span></span><br><span class="line">./configure</span><br></pre></td></tr></table></figure>
-<p>出现如下页面表示成功</p>
-<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924130228697.png" alt="image-20210924130228697"></p>
-<p>接下来执行以下命令，即pcre编译完成。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install </span><br></pre></td></tr></table></figure>
-<p>编译zlib，执行过程和pcre一致，在这里不再重复。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> zlib-1.2.11</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-<h4 id="3、编译安装nginx"><a href="#3、编译安装nginx" class="headerlink" title="3、编译安装nginx"></a>3、编译安装nginx</h4><p>进入nginx目录，这里我选择将nginx编译后放入/root/target/nginx目录下面，这个目录你们可以自行配置，参数介绍官方的<a target="_blank" rel="noopener" href="https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#sources">安装文档</a>有很详细的介绍，这里我不在介绍。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> nginx-1.18.0</span><br><span class="line">./configure --sbin-path=/root/target/nginx --conf-path=/root/target/nginx/nginx.conf --pid-path=/root/target/nginx/nginx.pid --with-http_ssl_module --with-stream --with-pcre=../pcre-8.44 --with-zlib=../zlib-1.2.11 --without-http_empty_gif_module</span><br></pre></td></tr></table></figure>
-<p>在运行上述命令的时候我发现了另一个问题，这个是没有OpenSSL的环境。</p>
-<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924131144777.png" alt="image-20210924131144777"></p>
-<p>我们执行以下命令来安装OpenSSL的环境</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install openssl openssl-devel</span><br></pre></td></tr></table></figure>
-<p>然后在继续执行就可以了</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./configure --sbin-path=/root/target/nginx --conf-path=/root/target/nginx/nginx.conf --pid-path=/root/target/nginx/nginx.pid --with-http_ssl_module --with-stream --with-pcre=../pcre-8.44 --with-zlib=../zlib-1.2.11 --without-http_empty_gif_module</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-<p>这样nginx的源码编译安装就大功告成了，附上一个nginx编译完成的截图。</p>
-<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924131612064.png" alt="image-20210924131612064"></p>
-<p>再附上一个安装到目标文件夹的截图。</p>
-<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924131713603.png" alt="image-20210924131713603"></p>
-<p>最后说一句，刚开始我准备使用nginx-1.9.15，可是后来在使用./configure的时候遇见了各种问题，后来就按照官方文档使用了稳定的nginx-1.18.0。</p>
-<p>参考链接：</p>
-<p>nginx官方文档：<a target="_blank" rel="noopener" href="https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#sources">https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#sources</a></p>
-<p>安装OpenSSL：<a target="_blank" rel="noopener" href="https://blog.csdn.net/testcs_dn/article/details/51461999">https://blog.csdn.net/testcs_dn/article/details/51461999</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -391,13 +348,6 @@
             </span>
 
           
-            <span id="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Redis/" class="post-meta-item leancloud_visitors" data-flag-title="Linux源码编译安装Redis" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
 
         </div>
       </header>
@@ -565,97 +515,6 @@
 
 
 
-<script>
-  (function() {
-    function leancloudSelector(url) {
-      url = encodeURI(url);
-      return document.getElementById(url).querySelector('.leancloud-visitors-count');
-    }
-
-    function addCount(Counter) {
-      var visitors = document.querySelector('.leancloud_visitors');
-      var url = decodeURI(visitors.id);
-      var title = visitors.dataset.flagTitle;
-
-      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
-        .then(response => response.json())
-        .then(({ results }) => {
-          if (results.length > 0) {
-            var counter = results[0];
-            leancloudSelector(url).innerText = counter.time + 1;
-            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
-              .catch(error => {
-                console.error('Failed to save visitor count', error);
-              });
-          } else {
-              Counter('post', '/classes/Counter', { title, url, time: 1 })
-                .then(response => response.json())
-                .then(() => {
-                  leancloudSelector(url).innerText = 1;
-                })
-                .catch(error => {
-                  console.error('Failed to create', error);
-                });
-          }
-        })
-        .catch(error => {
-          console.error('LeanCloud Counter Error', error);
-        });
-    }
-
-    function showTime(Counter) {
-      var visitors = document.querySelectorAll('.leancloud_visitors');
-      var entries = [...visitors].map(element => {
-        return decodeURI(element.id);
-      });
-
-      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
-        .then(response => response.json())
-        .then(({ results }) => {
-          for (let url of entries) {
-            let target = results.find(item => item.url === url);
-            leancloudSelector(url).innerText = target ? target.time : 0;
-          }
-        })
-        .catch(error => {
-          console.error('LeanCloud Counter Error', error);
-        });
-    }
-
-    let { app_id, app_key, server_url } = {"enable":true,"app_id":"1a4WeuKeWy5gJKBN4EGFQe8h-gzGzoHsz","app_key":"P4PxazeB9reCEXRrmMDqGess","server_url":null,"security":false};
-    function fetchData(api_server) {
-      var Counter = (method, url, data) => {
-        return fetch(`${api_server}/1.1${url}`, {
-          method,
-          headers: {
-            'X-LC-Id'     : app_id,
-            'X-LC-Key'    : app_key,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data)
-        });
-      };
-      if (CONFIG.page.isPost) {
-        if (CONFIG.hostname !== location.hostname) return;
-        addCount(Counter);
-      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
-        showTime(Counter);
-      }
-    }
-
-    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
-
-    if (api_server) {
-      fetchData(api_server);
-    } else {
-      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
-        .then(response => response.json())
-        .then(({ api_server }) => {
-          fetchData('https://' + api_server);
-        });
-    }
-  })();
-</script>
 
 
       </div>
