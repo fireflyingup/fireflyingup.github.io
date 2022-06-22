@@ -165,6 +165,335 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://fireflyingup.github.io/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BApostgresql%E9%95%9C%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Fire Flying">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fire Flying's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BApostgresql%E9%95%9C%E5%83%8F/" class="post-title-link" itemprop="url">dockerfile基于alpine构建postgresql镜像</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-21 23:49:26" itemprop="dateCreated datePublished" datetime="2022-06-21T23:49:26+08:00">2022-06-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-22 15:47:10" itemprop="dateModified" datetime="2022-06-22T15:47:10+08:00">2022-06-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dockerfile/" itemprop="url" rel="index"><span itemprop="name">dockerfile</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记录一次自己通过dockerfile源码构建redis的血与泪，以及踩过的坑。</p>
+<h2 id="坏境"><a href="#坏境" class="headerlink" title="坏境"></a>坏境</h2><p>docker：20.10.10</p>
+<p>nginx：1.18.0</p>
+<p>podtgres：10.21</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>先创建一个空的文件夹，创建一个Dokcerfile文件，注意D大些，f小写。</p>
+<p>准备pgsql的源码包(<a target="_blank" rel="noopener" href="https://ftp.postgresql.org/pub/source/v10.21/postgresql-10.21.tar.gz">版本直达</a>)，也可以去<a target="_blank" rel="noopener" href="https://www.postgresql.org/ftp/source/">pgsql官网</a>处自行下载对应的版本。</p>
+<p>准备一个初始化脚本，主要用于创建数据库，用户等等。</p>
+<p>准备完之后文件里面内容如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">╰─$ ls -al</span><br><span class="line">total 50152</span><br><span class="line">drwxr-xr-x  8 guoying  staff       256 Jun 21 11:42 .</span><br><span class="line">drwxr-xr-x  7 guoying  staff       224 Jun 22 15:06 ..</span><br><span class="line">-rw-r--r--  1 guoying  staff      1408 Jun 21 22:45 Dockerfile</span><br><span class="line">-rw-r--r--  1 guoying  staff    108622 Jun 21 11:38 data.sql</span><br><span class="line">-rw-r--r--  1 guoying  staff       640 Jun 21 16:07 dbinit.sh</span><br><span class="line">-rw-r--r--  1 guoying  staff      2897 Jun 21 11:38 index.sql</span><br><span class="line">-rw-r--r--  1 guoying  staff    128105 Jun 21 11:38 initdb.sql</span><br><span class="line">-rw-r--r--@ 1 guoying  staff  25419930 Jun 21 09:29 postgresql-10.21.tar.gz</span><br></pre></td></tr></table></figure>
+<h2 id="编写Dockerfile"><a href="#编写Dockerfile" class="headerlink" title="编写Dockerfile"></a>编写Dockerfile</h2><p>这里直接展示整个dockerfile文件，已经对应的注释</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build pgsql</span></span><br><span class="line"><span class="keyword">FROM</span> alpine:<span class="number">3.16</span>.<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ARG</span> <span class="keyword">user</span>=postgres</span><br><span class="line"><span class="keyword">ARG</span> group=postgres</span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将必要文件移入镜像</span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> postgresql-10.21.tar.gz /</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ./dbinit.sh /</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ./initdb.sql /</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ./data.sql / d</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建组和用户 ps：pgsql不允许非root安装</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> addgroup -S <span class="variable">$&#123;group&#125;</span> &amp;&amp; adduser \</span></span><br><span class="line"><span class="bash">    --disabled-password \</span></span><br><span class="line"><span class="bash">    --gecos <span class="string">&quot;&quot;</span> \</span></span><br><span class="line"><span class="bash">    --home <span class="string">&quot;/home/postgres&quot;</span> \</span></span><br><span class="line"><span class="bash">    --ingroup <span class="string">&quot;<span class="variable">$&#123;group&#125;</span>&quot;</span> \</span></span><br><span class="line"><span class="bash">    --no-create-home \</span></span><br><span class="line"><span class="bash">    <span class="comment"># --uid &quot;$UID&quot; \</span></span></span><br><span class="line"><span class="bash">    <span class="string">&quot;<span class="variable">$&#123;user&#125;</span>&quot;</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="comment"># 指定apk的aliyun源</span></span></span><br><span class="line">    echo <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/main&quot;</span> &gt; /etc/apk/repositories &amp;&amp; \</span><br><span class="line">    echo <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/community&quot;</span> &gt;&gt; /etc/apk/repositories &amp;&amp; \</span><br><span class="line">    apk update &amp;&amp; \</span><br><span class="line">    <span class="comment"># 安装所需要的环境</span></span><br><span class="line">    apk <span class="keyword">add</span><span class="bash"> --no-cache --virtual .build-deps \</span></span><br><span class="line"><span class="bash">    gcc \</span></span><br><span class="line"><span class="bash">    g++ \</span></span><br><span class="line"><span class="bash">    make \</span></span><br><span class="line"><span class="bash">    readline-dev \</span></span><br><span class="line"><span class="bash">    zlib-dev &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">cd</span> /postgresql-10.21 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="comment"># 编译 指定端口8888</span></span></span><br><span class="line">    ./configure --prefix=/sca/postgresql --with-pgport=<span class="number">8888</span> &amp;&amp; \</span><br><span class="line">    make &amp;&amp; make install &amp;&amp; \</span><br><span class="line">    <span class="comment"># 删除缓存和不用的文件</span></span><br><span class="line">    rm -rf /postgresql-<span class="number">10.21</span> &amp;&amp; \</span><br><span class="line">    rm -rf /var/lib/apk/* &amp;&amp; \</span><br><span class="line">    rm -rf /tmp/* &amp;&amp; \</span><br><span class="line">    apk del .build-deps \</span><br><span class="line">    gcc \</span><br><span class="line">    g++ \</span><br><span class="line">    make &amp;&amp; \</span><br><span class="line">    <span class="comment"># 重新安装运行所需要的依赖</span></span><br><span class="line">    apk <span class="keyword">add</span><span class="bash"> readline-dev &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="comment"># 创建数据目录，pgsql的data会放在这个目录里面</span></span></span><br><span class="line">    mkdir /sca/data &amp;&amp; \</span><br><span class="line">    <span class="comment"># 赋予权限</span></span><br><span class="line">    chown -R $&#123;<span class="keyword">user</span>&#125;:$&#123;<span class="keyword">user</span>&#125; /sca &amp;&amp; \</span><br><span class="line">    chown $&#123;<span class="keyword">user</span>&#125;:$&#123;<span class="keyword">user</span>&#125; /dbinit.sh &amp;&amp; \</span><br><span class="line">    chown $&#123;<span class="keyword">user</span>&#125;:$&#123;<span class="keyword">user</span>&#125; /initdb.sql &amp;&amp; \</span><br><span class="line">    chown $&#123;<span class="keyword">user</span>&#125;:$&#123;<span class="keyword">user</span>&#125; /data.sql &amp;&amp; \</span><br><span class="line">    chmod <span class="number">4755</span> /bin/busybox &amp;&amp; \</span><br><span class="line">    chmod <span class="number">755</span> /dbinit.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定postgres用户</span></span><br><span class="line"><span class="keyword">USER</span> $&#123;<span class="keyword">user</span>&#125;</span><br><span class="line"><span class="comment"># 执行初始化数据的脚本，前面已经传进去了，然后删除不需要的东西</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> /dbinit.sh &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /dbinit.sh &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /data.sql &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf init.sql</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露你的端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8888</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意这个-w，得要。</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [ <span class="string">&quot;/sca/postgresql/bin/pg_ctl&quot;</span>, <span class="string">&quot;-D&quot;</span>, <span class="string">&quot;/sca/data&quot;</span>, <span class="string">&quot;-w&quot;</span>, <span class="string">&quot;start&quot;</span> ]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>docker build -t fire-pgsql:v1.0.0 .</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://fireflyingup.github.io/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAnginx%E9%95%9C%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Fire Flying">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fire Flying's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAnginx%E9%95%9C%E5%83%8F/" class="post-title-link" itemprop="url">dockerfile基于alpine构建nginx镜像</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-21 23:49:18" itemprop="dateCreated datePublished" datetime="2022-06-21T23:49:18+08:00">2022-06-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-22 15:32:42" itemprop="dateModified" datetime="2022-06-22T15:32:42+08:00">2022-06-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dockerfile/" itemprop="url" rel="index"><span itemprop="name">dockerfile</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记录一次自己通过dockerfile源码构建redis的血与泪，以及踩过的坑。</p>
+<h2 id="坏境"><a href="#坏境" class="headerlink" title="坏境"></a>坏境</h2><p>docker：20.10.10</p>
+<p>nginx：1.18.0</p>
+<p>alpine：3.16.0</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>先创建一个空的文件夹，创建一个Dokcerfile文件，注意D大些，f小写。</p>
+<p>准备nginx的源码包(<a target="_blank" rel="noopener" href="https://nginx.org/download/nginx-1.18.0.tar.gz">版本直达</a>)，也可以去<a target="_blank" rel="noopener" href="https://nginx.org/en/download.html">nginx官网</a>处自行下载对应的版本。</p>
+<p>准备一个nginx.conf配置文件，里面主要包含了我们对nginx的一些配置，如下其中某些配置需要修改。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">daemon off ;</span><br></pre></td></tr></table></figure>
+<p>准备完之后文件里面内容如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">╰─$ ls -al</span><br><span class="line">total 2056</span><br><span class="line">drwxr-xr-x  6 guoying  staff      192 Jun 22 10:07 .</span><br><span class="line">drwxr-xr-x  7 guoying  staff      224 Jun 22 15:06 ..</span><br><span class="line">-rw-r--r--  1 guoying  staff     1219 Jun 20 23:25 Dockerfile</span><br><span class="line">drwxr-xr-x  7 guoying  staff      224 Jun 20 10:44 dist  <span class="comment"># 前端文件夹</span></span><br><span class="line">-rw-r--r--  1 guoying  staff  1039530 Apr 21  2020 nginx-1.18.0.tar.gz</span><br><span class="line">-rw-r--r--  1 guoying  staff     4820 Jun 20 22:44 nginx.conf <span class="comment">#里面需要个daemon off;</span></span><br></pre></td></tr></table></figure>
+<h2 id="编写Dockerfile"><a href="#编写Dockerfile" class="headerlink" title="编写Dockerfile"></a>编写Dockerfile</h2><p>这里直接展示整个dockerfile文件，已经对应的注释</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build nginx</span></span><br><span class="line"><span class="keyword">FROM</span> alpine:<span class="number">3.16</span>.<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将源码包考入的镜像的根目录下</span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> nginx-1.18.0.tar.gz /</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置aliyun仓库</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">echo</span> <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/main&quot;</span> &gt; /etc/apk/repositories &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/community&quot;</span> &gt;&gt; /etc/apk/r epositories &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="comment"># 更新apk</span></span></span><br><span class="line">    apk update &amp;&amp; \</span><br><span class="line">    <span class="comment"># 安装必要依赖</span></span><br><span class="line">    apk <span class="keyword">add</span><span class="bash"> --no-cache --virtual .build-deps \</span></span><br><span class="line"><span class="bash">        gcc \</span></span><br><span class="line"><span class="bash">        libc-dev \</span></span><br><span class="line"><span class="bash">        make \</span></span><br><span class="line"><span class="bash">        openssl-dev \</span></span><br><span class="line"><span class="bash">        pcre-dev \</span></span><br><span class="line"><span class="bash">        zlib-dev \</span></span><br><span class="line"><span class="bash">        linux-headers \</span></span><br><span class="line"><span class="bash">        curl \</span></span><br><span class="line"><span class="bash">        gnupg \</span></span><br><span class="line"><span class="bash">        libxslt-dev \</span></span><br><span class="line"><span class="bash">        gd-dev \</span></span><br><span class="line"><span class="bash">        geoip-dev &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="comment"># 开始编译nginx</span></span></span><br><span class="line">    cd /nginx-<span class="number">1.18</span>.<span class="number">0</span> &amp;&amp; \</span><br><span class="line">    ./configure --prefix=/sca/nginx &amp;&amp; \</span><br><span class="line">    make &amp;&amp; make install &amp;&amp; \</span><br><span class="line">    <span class="comment"># 删除不需要的文件以及缓存</span></span><br><span class="line">    rm -rf nginx-<span class="number">1.18</span>.<span class="number">0</span>.tar.gz &amp;&amp; \</span><br><span class="line">    rm -rf nginx-<span class="number">1.18</span>.<span class="number">0</span> &amp;&amp; \</span><br><span class="line">    rm -rf /sca/nginx/html &amp;&amp; \</span><br><span class="line">    rm -rf /var/lib/apk/* &amp;&amp; \</span><br><span class="line">    rm -rf /tmp/* &amp;&amp; \</span><br><span class="line">    <span class="comment"># 移除apk的依赖</span></span><br><span class="line">    apk del .build-deps \</span><br><span class="line">        gcc \</span><br><span class="line">        pcre-dev \</span><br><span class="line">        libc-dev \</span><br><span class="line">        make \</span><br><span class="line">        openssl-dev \</span><br><span class="line">        zlib-dev \</span><br><span class="line">        linux-headers \</span><br><span class="line">        curl \</span><br><span class="line">        gnupg \</span><br><span class="line">        libxslt-dev \</span><br><span class="line">        gd-dev \</span><br><span class="line">        geoip-dev &amp;&amp; \</span><br><span class="line">    <span class="comment"># 重新安装运行时需要的依赖</span></span><br><span class="line">    apk <span class="keyword">add</span><span class="bash"> pcre-dev</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cp html file to container</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ./dist /sca/nginx/html</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ./nginx.conf /sca/nginx/conf/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露80端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># add run command </span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [ <span class="string">&quot;/sca/nginx/sbin/nginx&quot;</span> ]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>docker build -t fire-nginx:v1.0.0 .</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://fireflyingup.github.io/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAredis%E9%95%9C%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Fire Flying">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fire Flying's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAredis%E9%95%9C%E5%83%8F/" class="post-title-link" itemprop="url">dockerfile基于alpine构建redis镜像</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-21 23:49:13" itemprop="dateCreated datePublished" datetime="2022-06-21T23:49:13+08:00">2022-06-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-22 15:17:44" itemprop="dateModified" datetime="2022-06-22T15:17:44+08:00">2022-06-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dockerfile/" itemprop="url" rel="index"><span itemprop="name">dockerfile</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记录一次自己通过dockerfile源码构建redis的血与泪，以及踩过的坑。</p>
+<h2 id="坏境"><a href="#坏境" class="headerlink" title="坏境"></a>坏境</h2><p>docker：20.10.10</p>
+<p>redis：5.0.14</p>
+<p>alpine：3.16.0</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>先创建一个空的文件夹，创建一个Dokcerfile文件，注意D大些，f小写。</p>
+<p>准备redis-5.0.14的源码包(<a target="_blank" rel="noopener" href="https://download.redis.io/releases/redis-5.0.14.tar.gz">5.0.14版本直达</a>)，也可以去<a target="_blank" rel="noopener" href="https://download.redis.io/releases/">所有版本</a>处自行下载对应的版本。</p>
+<p>准备一个redis.conf配置文件，里面主要包含了我们对redis的一些配置，如下其中某些配置需要修改。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">daemonize no</span><br></pre></td></tr></table></figure>
+<p>准备完之后文件里面内容如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">╰─$ ls -alh</span><br><span class="line">total 4040</span><br><span class="line">drwxr-xr-x  5 guoying  staff   160B Jun 21 00:27 .</span><br><span class="line">drwxr-xr-x  7 guoying  staff   224B Jun 21 22:44 ..</span><br><span class="line">-rw-r--r--  1 guoying  staff   901B Jun 21 01:07 Dockerfile</span><br><span class="line">-rw-r--r--@ 1 guoying  staff   1.9M Jun 20 23:34 redis-5.0.14.tar.gz</span><br><span class="line">-rw-r--r--  1 guoying  staff    57K Jun 21 01:13 redis.conf</span><br></pre></td></tr></table></figure>
+<h2 id="编写Dockerfile"><a href="#编写Dockerfile" class="headerlink" title="编写Dockerfile"></a>编写Dockerfile</h2><p>我们先想想整个dockerfile的步骤</p>
+<p>1、首先得基于一个很小的系统（alpine）</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> alpine:<span class="number">3.16</span>.<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>2、准备好需要的文件（redis源码包），可以在镜像里面下载（太慢）也可以自行拷贝进去，这里选择拷贝进去。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ADD</span><span class="bash"> redis-5.0.14.tar.gz /  <span class="comment"># 将同级目录的redis源码压缩包放入镜像中（压缩包会自行解压）</span></span></span><br></pre></td></tr></table></figure>
+<p>3、配置apk的源</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">echo</span> <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/main&quot;</span> &gt; /etc/apk/repositories &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/community&quot;</span> &gt;&gt; /etc/apk/r epositories</span></span><br></pre></td></tr></table></figure>
+<p>4、安装需要的依赖</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> apk update &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk add --no-cache --virtual .build-deps \ <span class="comment"># --no-cache表示不缓存</span></span></span><br><span class="line">    gcc \</span><br><span class="line">    g++ \</span><br><span class="line">    make \</span><br><span class="line">    libffi-dev \</span><br><span class="line">    openssl-dev </span><br><span class="line"><span class="comment"># redis还需要其他依赖，在redis的本地deps目录下面</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">cd</span> /redis-5.0.14/deps &amp;&amp; \</span></span><br><span class="line"><span class="bash">    make lua hiredis linenoise</span></span><br></pre></td></tr></table></figure>
+<p>5、编译redis，指定编译的地址</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">cd</span> /redis-5.0.14 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    make PREFIX=/sca/redis install</span></span><br></pre></td></tr></table></figure>
+<p>6、删除编译时候需要运行时候不需要的依赖和多余文件</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> rm -rf /redis-5.0.14 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /var/lib/apk/* &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /tmp/* &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk del .build-deps \</span></span><br><span class="line"><span class="bash">    gcc \</span></span><br><span class="line"><span class="bash">    g++ \</span></span><br><span class="line"><span class="bash">    make \</span></span><br><span class="line"><span class="bash">    libffi-dev \</span></span><br><span class="line"><span class="bash">    openssl-dev</span></span><br></pre></td></tr></table></figure>
+<p>7、替换配置文件 并且 暴露端口</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COPY</span><span class="bash"> ./redis.conf /sca/redis/</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">6379</span></span><br></pre></td></tr></table></figure>
+<p>8、准备启动参数</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CMD</span><span class="bash"> [ <span class="string">&quot;/sca/redis/bin/redis-server&quot;</span>, <span class="string">&quot;/sca/redis/redis.conf&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+<p>这样我们整个dockerfile的文件就如下所示</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> alpine:<span class="number">3.16</span>.<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> redis-5.0.14.tar.gz /</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">echo</span> <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/main&quot;</span> &gt; /etc/apk/repositories &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/community&quot;</span> &gt;&gt; /etc/apk/r epositories</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apk update &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk add --no-cache --virtual .build-deps \</span></span><br><span class="line"><span class="bash">    gcc \</span></span><br><span class="line"><span class="bash">    g++ \</span></span><br><span class="line"><span class="bash">    make \</span></span><br><span class="line"><span class="bash">    libffi-dev \</span></span><br><span class="line"><span class="bash">    openssl-dev </span></span><br><span class="line"><span class="comment"># redis还需要其他依赖，在redis的本地deps目录下面</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">cd</span> /redis-5.0.14/deps &amp;&amp; \</span></span><br><span class="line"><span class="bash">    make lua hiredis linenoise</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">cd</span> /redis-5.0.14 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    make PREFIX=/sca/redis install</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> rm -rf /redis-5.0.14 &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /var/lib/apk/* &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /tmp/* &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk del .build-deps \</span></span><br><span class="line"><span class="bash">    gcc \</span></span><br><span class="line"><span class="bash">    g++ \</span></span><br><span class="line"><span class="bash">    make \</span></span><br><span class="line"><span class="bash">    libffi-dev \</span></span><br><span class="line"><span class="bash">    openssl-dev</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ./redis.conf /sca/redis/</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">6379</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [ <span class="string">&quot;/sca/redis/bin/redis-server&quot;</span>, <span class="string">&quot;/sca/redis/redis.conf&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+<p>接下来我们执行docker build -t fire-redis:v1.1.0 . ，等若干分钟之后</p>
+<p><img src="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAredis%E9%95%9C%E5%83%8F/image-20220622144726727.png" alt="image-20220622144726727"></p>
+<p>好家伙345MB，这谁受得了，我们可以使用docker history b3cf3ac45ad1 (这个是IMAGE ID)查看镜像的制造过程</p>
+<p><img src="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAredis%E9%95%9C%E5%83%8F/image-20220622144948226.png" alt="image-20220622144948226"></p>
+<p>接下来我们准备对镜像进行瘦身，最主要的一个过程就是对RUN 合并，dockerfile文件如下</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> alpine:<span class="number">3.16</span>.<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> redis-5.0.14.tar.gz /</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">echo</span> <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/main&quot;</span> &gt; /etc/apk/repositories &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">&quot;http://mirrors.aliyun.com/alpine/v3.11/community&quot;</span> &gt;&gt; /etc/apk/r epositories &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk update &amp;&amp; \</span></span><br><span class="line"><span class="bash">    apk add --no-cache --virtual .build-deps \ </span></span><br><span class="line">    gcc \</span><br><span class="line">    g++ \</span><br><span class="line">    make \</span><br><span class="line">    libffi-dev \</span><br><span class="line">    openssl-dev &amp;&amp; \</span><br><span class="line">    cd /redis-<span class="number">5.0</span>.<span class="number">14</span>/deps &amp;&amp; \</span><br><span class="line">    make lua hiredis linenoise &amp;&amp; \</span><br><span class="line">    cd /redis-<span class="number">5.0</span>.<span class="number">14</span> &amp;&amp; \</span><br><span class="line">    make PREFIX=/sca/redis install &amp;&amp; \</span><br><span class="line">    rm -rf /redis-<span class="number">5.0</span>.<span class="number">14</span> &amp;&amp; \</span><br><span class="line">    rm -rf /var/lib/apk/* &amp;&amp; \</span><br><span class="line">    rm -rf /tmp/* &amp;&amp; \</span><br><span class="line">    apk del .build-deps \</span><br><span class="line">    gcc \</span><br><span class="line">    g++ \</span><br><span class="line">    make \</span><br><span class="line">    libffi-dev \</span><br><span class="line">    openssl-dev</span><br><span class="line">    </span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ./redis.conf /sca/redis/</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">6379</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [ <span class="string">&quot;/sca/redis/bin/redis-server&quot;</span>, <span class="string">&quot;/sca/redis/redis.conf&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+<p>可以看到大小有很大的缩减</p>
+<p><img src="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAredis%E9%95%9C%E5%83%8F/image-20220622145228819-5880765.png" alt="image-20220622145228819"></p>
+<p>这样子我们就已经制作好了一个redis的镜像，此时使用docker run -d -p 6379:6379 fire-redis:v1.1.1启动容器</p>
+<p><img src="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAredis%E9%95%9C%E5%83%8F/image-20220622145552217.png" alt="image-20220622145552217"></p>
+<h2 id="常见错误"><a href="#常见错误" class="headerlink" title="常见错误"></a>常见错误</h2><p>错误1:no such file or directory</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">╰─$ docker build -t fire-nginx:v1.1.0 .                                                                                                                                                                                                                                     1 ↵</span><br><span class="line">[+] Building 0.1s (1/2)</span><br><span class="line"> =&gt; [internal] load build definition from Dockerfile                                  0.0s</span><br><span class="line"> =&gt; =&gt; transferring dockerfile: 2B                                                    0.0s</span><br><span class="line">failed to solve with frontend dockerfile.v0: failed to <span class="built_in">read</span> dockerfile: open /var/lib/docker/tmp/buildkit-mount956713246/Dockerfile: no such file or directory</span><br></pre></td></tr></table></figure>
+<p>解决：Dockerfile写成了DockerFile，注意f小写。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Struggle99/article/details/124684534">https://blog.csdn.net/Struggle99/article/details/124684534</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://fireflyingup.github.io/2021/12/12/log4j2-CVE-2021-44228-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -691,20 +1020,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -731,7 +1060,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -740,12 +1069,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">11k</span>
+    <span title="站点总字数">19k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">10 分钟</span>
+    <span title="站点阅读时长">17 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
