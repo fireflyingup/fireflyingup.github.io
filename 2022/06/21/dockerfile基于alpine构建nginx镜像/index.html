@@ -26,13 +26,9 @@
 <meta property="og:description" content="坏境docker：20.10.10 nginx：1.18.0 alpine：3.16.0 准备先创建一个空的文件夹，创建一个Dokcerfile文件，注意D大些，f小写。 准备nginx的源码包(版本直达)，也可以去nginx官网处自行下载对应的版本。 准备一个nginx.conf配置文件，里面主要包含了我们对nginx的一些配置，如下其中某些配置需要修改。 1daemon off ; 准备完之后">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-21T15:49:18.000Z">
-<meta property="article:modified_time" content="2022-06-24T06:52:32.990Z">
+<meta property="article:modified_time" content="2023-12-19T01:39:50.479Z">
 <meta property="article:author" content="Fire Flying">
 <meta property="article:tag" content="nginx">
-<meta property="article:tag" content="源码编译">
-<meta property="article:tag" content="docker">
-<meta property="article:tag" content="alpine">
-<meta property="article:tag" content="dockerfile">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
   <link rel="canonical" href="http://fireflyingup.github.io/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAnginx%E9%95%9C%E5%83%8F/index.html">
@@ -195,7 +191,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CVE-2021-44228/" rel="tag">CVE-2021-44228</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alpine/" rel="tag">alpine</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker-compose/" rel="tag">docker-compose</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dockerfile/" rel="tag">dockerfile</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eclipse/" rel="tag">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/log4j/" rel="tag">log4j</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postgresql/" rel="tag">postgresql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" rel="tag">源码编译</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E/" rel="tag">漏洞</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker-compose/" rel="tag">docker-compose</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eclipse/" rel="tag">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postgresql/" rel="tag">postgresql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" rel="tag">漏洞分析</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -205,7 +201,7 @@
   <div class="widget">
     <h3 class="widget-title">标签云</h3>
     <div class="widget-body tagcloud">
-      <a href="/tags/CVE-2021-44228/" style="font-size: 13px;">CVE-2021-44228</a> <a href="/tags/Java/" style="font-size: 13px;">Java</a> <a href="/tags/alpine/" style="font-size: 13.5px;">alpine</a> <a href="/tags/docker/" style="font-size: 13.75px;">docker</a> <a href="/tags/docker-compose/" style="font-size: 13px;">docker-compose</a> <a href="/tags/dockerfile/" style="font-size: 13.5px;">dockerfile</a> <a href="/tags/eclipse/" style="font-size: 13px;">eclipse</a> <a href="/tags/linux/" style="font-size: 13.5px;">linux</a> <a href="/tags/log4j/" style="font-size: 13px;">log4j</a> <a href="/tags/nginx/" style="font-size: 13.25px;">nginx</a> <a href="/tags/postgresql/" style="font-size: 13.25px;">postgresql</a> <a href="/tags/redis/" style="font-size: 13.25px;">redis</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" style="font-size: 14px;">源码编译</a> <a href="/tags/%E6%BC%8F%E6%B4%9E/" style="font-size: 13px;">漏洞</a> <a href="/tags/%E9%9B%86%E5%90%88/" style="font-size: 13px;">集合</a>
+      <a href="/tags/Java/" style="font-size: 13px;">Java</a> <a href="/tags/docker-compose/" style="font-size: 13px;">docker-compose</a> <a href="/tags/eclipse/" style="font-size: 13px;">eclipse</a> <a href="/tags/nginx/" style="font-size: 14px;">nginx</a> <a href="/tags/postgresql/" style="font-size: 14px;">postgresql</a> <a href="/tags/redis/" style="font-size: 14px;">redis</a> <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" style="font-size: 13px;">漏洞分析</a>
     </div>
   </div>
 
@@ -342,7 +338,7 @@
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/alpine/" rel="tag">alpine</a>, <a class="article-tag-link-link" href="/tags/docker/" rel="tag">docker</a>, <a class="article-tag-link-link" href="/tags/dockerfile/" rel="tag">dockerfile</a>, <a class="article-tag-link-link" href="/tags/nginx/" rel="tag">nginx</a>, <a class="article-tag-link-link" href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" rel="tag">源码编译</a>
+	<a class="article-tag-link-link" href="/tags/nginx/" rel="tag">nginx</a>
   </span>
 
 
