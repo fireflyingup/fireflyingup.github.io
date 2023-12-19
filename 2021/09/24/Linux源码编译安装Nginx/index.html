@@ -25,19 +25,19 @@
 <meta property="og:site_name" content="Fire Flying&#39;s blog">
 <meta property="og:description" content="1、nginx下载整个安装步骤可以直接采用官方的安装文档 使用wget命令下载nginx，这里以nginx 1.18.0 版本为例 12wget https:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.18.0.tar.gz #下载tar -zxvf nginx-1.18.0.tar.gz #解压 或者去nginx官网下载页面下载安装包，页面如下  2、必要模块安装下载PCRE，PC">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://fireflyingup.github.io/.io//image-20210924103858604.png">
-<meta property="og:image" content="http://fireflyingup.github.io/.io//image-20210924125124462.png">
-<meta property="og:image" content="http://fireflyingup.github.io/.io//image-20210924125702614.png">
-<meta property="og:image" content="http://fireflyingup.github.io/.io//image-20210924130228697.png">
-<meta property="og:image" content="http://fireflyingup.github.io/.io//image-20210924131144777.png">
-<meta property="og:image" content="http://fireflyingup.github.io/.io//image-20210924131612064.png">
-<meta property="og:image" content="http://fireflyingup.github.io/.io//image-20210924131713603.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924103858604.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924125124462.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924125702614.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924130228697.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924131144777.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924131612064.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924131713603.png">
 <meta property="article:published_time" content="2021-09-23T16:44:20.000Z">
 <meta property="article:modified_time" content="2023-12-19T01:39:30.236Z">
 <meta property="article:author" content="Fire Flying">
 <meta property="article:tag" content="nginx">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://fireflyingup.github.io/.io//image-20210924103858604.png">
+<meta name="twitter:image" content="http://fireflyingup.github.io/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924103858604.png">
   <!-- Canonical links -->
   <link rel="canonical" href="http://fireflyingup.github.io/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/index.html">
   
@@ -369,22 +369,22 @@
 <p>使用wget命令下载nginx，这里以nginx 1.18.0 版本为例</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://nginx.org/download/nginx-1.18.0.tar.gz <span class="comment">#下载</span></span><br><span class="line">tar -zxvf nginx-1.18.0.tar.gz <span class="comment">#解压</span></span><br></pre></td></tr></table></figure>
 <p>或者去<a target="_blank" rel="noopener" href="http://nginx.org/en/download.html">nginx官网下载页面</a>下载安装包，页面如下</p>
-<p><img src="/.io//image-20210924103858604.png" alt="image-20210924103858604"></p>
+<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924103858604.png" alt="image-20210924103858604"></p>
 <h4 id="2、必要模块安装"><a href="#2、必要模块安装" class="headerlink" title="2、必要模块安装"></a>2、必要模块安装</h4><p>下载PCRE，PCRE - Supports regular expressions. Required by the NGINX <a target="_blank" rel="noopener" href="https://nginx.org/en/docs/ngx_core_module.html">Core</a> and <a target="_blank" rel="noopener" href="https://nginx.org/en/docs/http/ngx_http_rewrite_module.html">Rewrite</a> modules.</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://ftp.pcre.org/pub/pcre/pcre-8.44.tar.gz <span class="comment">#下载</span></span><br><span class="line">tar -zxvf pcre-8.44.tar.gz <span class="comment">#解压</span></span><br></pre></td></tr></table></figure>
 <p>下载zlib, zlib - Supports header compression. Required by the NGINX <a target="_blank" rel="noopener" href="https://nginx.org/en/docs/http/ngx_http_gzip_module.html">Gzip</a> module.</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http://zlib.net/zlib-1.2.11.tar.gz <span class="comment">#下载</span></span><br><span class="line">tar -zxvf zlib-1.2.11.tar.gz <span class="comment">#解压</span></span><br></pre></td></tr></table></figure>
 <p>可以看到当前文件夹下面有以下文件</p>
-<p><img src="/.io//image-20210924125124462.png" alt="image-20210924125124462"></p>
+<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924125124462.png" alt="image-20210924125124462"></p>
 <p>接下来我们依次进行编译</p>
 <p>编译pcre-8.44</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> pcre-8.44</span><br><span class="line">./configure</span><br></pre></td></tr></table></figure>
 <p>发现以下报错</p>
-<p><img src="/.io//image-20210924125702614.png" alt="image-20210924125702614"></p>
+<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924125702614.png" alt="image-20210924125702614"></p>
 <p>原因是没有gcc-c++编译环境，输入以下命令</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install gcc-c++</span><br><span class="line"><span class="comment">#完成安装之后继续编译pcre</span></span><br><span class="line">./configure</span><br></pre></td></tr></table></figure>
 <p>出现如下页面表示成功</p>
-<p><img src="/.io//image-20210924130228697.png" alt="image-20210924130228697"></p>
+<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924130228697.png" alt="image-20210924130228697"></p>
 <p>接下来执行以下命令，即pcre编译完成。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install </span><br></pre></td></tr></table></figure>
 <p>编译zlib，执行过程和pcre一致，在这里不再重复。</p>
@@ -392,15 +392,15 @@
 <h4 id="3、编译安装nginx"><a href="#3、编译安装nginx" class="headerlink" title="3、编译安装nginx"></a>3、编译安装nginx</h4><p>进入nginx目录，这里我选择将nginx编译后放入/root/target/nginx目录下面，这个目录你们可以自行配置，参数介绍官方的<a target="_blank" rel="noopener" href="https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#sources">安装文档</a>有很详细的介绍，这里我不在介绍。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> nginx-1.18.0</span><br><span class="line">./configure --sbin-path=/root/target/nginx --conf-path=/root/target/nginx/nginx.conf --pid-path=/root/target/nginx/nginx.pid --with-http_ssl_module --with-stream --with-pcre=../pcre-8.44 --with-zlib=../zlib-1.2.11 --without-http_empty_gif_module</span><br></pre></td></tr></table></figure>
 <p>在运行上述命令的时候我发现了另一个问题，这个是没有OpenSSL的环境。</p>
-<p><img src="/.io//image-20210924131144777.png" alt="image-20210924131144777"></p>
+<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924131144777.png" alt="image-20210924131144777"></p>
 <p>我们执行以下命令来安装OpenSSL的环境</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install openssl openssl-devel</span><br></pre></td></tr></table></figure>
 <p>然后在继续执行就可以了</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./configure --sbin-path=/root/target/nginx --conf-path=/root/target/nginx/nginx.conf --pid-path=/root/target/nginx/nginx.pid --with-http_ssl_module --with-stream --with-pcre=../pcre-8.44 --with-zlib=../zlib-1.2.11 --without-http_empty_gif_module</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
 <p>这样nginx的源码编译安装就大功告成了，附上一个nginx编译完成的截图。</p>
-<p><img src="/.io//image-20210924131612064.png" alt="image-20210924131612064"></p>
+<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924131612064.png" alt="image-20210924131612064"></p>
 <p>再附上一个安装到目标文件夹的截图。</p>
-<p><img src="/.io//image-20210924131713603.png" alt="image-20210924131713603"></p>
+<p><img src="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Nginx/image-20210924131713603.png" alt="image-20210924131713603"></p>
 <p>最后说一句，刚开始我准备使用nginx-1.9.15，可是后来在使用./configure的时候遇见了各种问题，后来就按照官方文档使用了稳定的nginx-1.18.0。</p>
 <p>参考链接：</p>
 <p>nginx官方文档：<a target="_blank" rel="noopener" href="https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#sources">https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#sources</a></p>
