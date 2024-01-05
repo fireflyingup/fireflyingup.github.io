@@ -75,7 +75,7 @@
 <div class="widgets">
 <widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="站内搜索"><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
 
-<widget class="widget-wrapper recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2023/04/28/algorithm/"><span class="title">算法与数据结构</span></a><a class="item title" href="/2022/04/21/%E9%9B%86%E5%90%88/"><span class="title">Java集合</span></a><a class="item title" href="/2021/12/12/log4j2-CVE-2021-44228-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/"><span class="title">log4j2(CVE-2021-44228)漏洞分析</span></a><a class="item title" href="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAnginx%E9%95%9C%E5%83%8F/"><span class="title">dockerfile基于alpine构建nginx镜像</span></a><a class="item title" href="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BApostgresql%E9%95%9C%E5%83%8F/"><span class="title">dockerfile基于alpine构建postgresql镜像</span></a></div></widget>
+<widget class="widget-wrapper recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2023/04/28/algorithm/"><span class="title">算法与数据结构</span></a><a class="item title" href="/2023/04/28/kafka/"><span class="title">kafka</span></a><a class="item title" href="/2023/12/28/cloud/"><span class="title">cloud</span></a><a class="item title" href="/2023/12/28/dubbo/"><span class="title">dubbo</span></a><a class="item title" href="/2022/04/21/%E9%9B%86%E5%90%88/"><span class="title">Java集合</span></a></div></widget>
 
 
 </div>
@@ -96,9 +96,14 @@
   
 
 <div class="nav-wrap"><nav class="sub post cap"><a class="active" href="/">近期发布</a><a href="/categories">分类</a><a href="/tags">标签</a><a href="/archives">归档</a></nav></div>
-  <div class="post-list post"><a class="post-card post " href="/2023/12/26/kafka/">
-<article class="md-text"><h2 class="post-title">2023-12-26</h2><div class="excerpt"><p>title: kafkadate: 2023-11-28 21:04:23tags: [kafka]categories: kafka
-</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-12-26T02:05:59.630Z">2023-12-26</time></span></div></article>
+  <div class="post-list post"><a class="post-card post " href="/2023/12/28/dubbo/">
+<article class="md-text"><h2 class="post-title">dubbo</h2><div class="excerpt"><p>Dubbo负载均衡策略
+RandomLoadBalance:随机负载均衡。随机的选择一个。是Dubbo的默认负载均衡策略。
+RoundRobinLoadBalance:轮询负载均衡。轮询选择一个。
+LeastActiveLoadBalance:最少活跃调用数，相同活跃数的随机。活跃数指调用前后计数差。使慢的 Provider 收到更少请求，因为越慢的 Provider 的调用前后计数差会越大...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-12-28T02:09:01.000Z">2023-12-28</time></span><span class="cap breadcrumb">dubbo</span></div></article>
+</a><a class="post-card post " href="/2023/12/28/cloud/">
+<article class="md-text"><h2 class="post-title">cloud</h2><div class="excerpt"><p>Cloud负载均衡策略1.轮询策略轮询策略：RoundRobinRule，按照一定的顺序依次调用服务实例。比如一共有 3 个服务，第一次调用服务 1，第二次调用服务 2，第三次调用服务3，依次类推。 此策略的配置设置如下：
+123springcloud-nacos-provider: # nacos中的服务id  ribbon:    NFLoadBalancerRuleClassName:...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-12-28T02:09:01.000Z">2023-12-28</time></span><span class="cap breadcrumb">cloud</span></div></article>
 </a><a class="post-card post " href="/2023/04/28/algorithm/">
 <article class="md-text"><h2 class="post-title">算法与数据结构</h2><div class="excerpt"><p>排序
 
@@ -106,6 +111,8 @@
 
 
 123456789101112131415public void sort(int[] array) &#123;  int length = array.length;  for (int i = 0; i &lt; length - 1; i++) &#123; ...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-04-28T02:09:01.000Z">2023-04-28</time></span><span class="cap breadcrumb">算法</span></div></article>
+</a><a class="post-card post " href="/2023/04/28/kafka/">
+<article class="md-text"><h2 class="post-title">kafka</h2><div class="excerpt"><p>Kafka</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-04-28T02:09:01.000Z">2023-04-28</time></span><span class="cap breadcrumb">kafka</span></div></article>
 </a><a class="post-card post " href="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/">
 <article class="md-text"><h2 class="post-title">搭建一个简单eclipse插件项目</h2><div class="excerpt"><p>引言​    这里主要记录如何手把手搭建一个eclipse的插件项目。
 引入插件​    由于eclipse插件开发需要plugin插件，所以要先去Help-&gt;Install New Software-&gt;选择对应ecipse版本的https://download.eclipse.org/releases/2022-06/202206151000下载地址-&gt;选择General...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-06-23T15:36:14.000Z">2022-06-23</time></span><span class="cap breadcrumb">eclipse plugins</span></div></article>
@@ -151,17 +158,6 @@ CVSS评分：10
 影响版本：Apache Log4j 2.x &lt; 2.15.0
 复现poc如下：
 1234public static void main(...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2021-12-12T11:23:30.000Z">2021-12-12</time></span><span class="cap breadcrumb">漏洞分析</span></div></article>
-</a><a class="post-card post " href="/2021/10/29/%E8%AE%B0%E4%B8%80%E6%AC%A1docker-compose%E7%9A%84%E4%BD%BF%E7%94%A8/">
-<article class="md-text"><h2 class="post-title">记一次docker-compose的使用</h2><div class="excerpt"><p>什么是docker-compose?英文解释：
-Docker Compose is a tool for running multi-container applications on Docker defined using the Compose file format. A Compose file is used to define how the one or more conta...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2021-10-28T16:41:19.000Z">2021-10-29</time></span><span class="cap breadcrumb">docker</span></div></article>
-</a><a class="post-card post " href="/2021/09/24/Linux%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85PostgreSql/">
-<article class="md-text"><h2 class="post-title">Linux源码编译安装PostgreSql</h2><div class="excerpt"><p>1、下载postgresql百度或者谷歌搜索postgresql download
-
-
-点进去就是postgresql的官方下载页面，页面如下
-
-
-如果你知道你自己的系统是什么，那么你就去上面蓝色框中选择自己系统对应的来进行下载，当然不知道的话，比如说你是arm的系统，这时候就要在自己的系统上使用源码编译，不然是无法使用的，这里就是要进行源码编译，所以我们选择Source code下面的fi...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2021-09-23T16:44:28.000Z">2021-09-24</time></span><span class="cap breadcrumb">安装</span></div></article>
 </a></div>
   
   <div class='paginator-wrap dis-select'>
