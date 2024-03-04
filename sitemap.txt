@@ -1,3 +1,5 @@
+http://fireflyingup.github.io/2023/10/20/mybatis/
+http://fireflyingup.github.io/2024/02/26/spring/
 http://fireflyingup.github.io/2023/04/28/algorithm/
 http://fireflyingup.github.io/2023/04/28/kafka/
 http://fireflyingup.github.io/2023/12/28/cloud/
@@ -29,6 +31,7 @@ http://fireflyingup.github.io/tags/Java/
 http://fireflyingup.github.io/tags/dubbo/
 http://fireflyingup.github.io/tags/cloud/
 http://fireflyingup.github.io/tags/kafka/
+http://fireflyingup.github.io/tags/mybatis/
 http://fireflyingup.github.io/categories/%E5%AE%89%E8%A3%85/
 http://fireflyingup.github.io/categories/%E7%AE%97%E6%B3%95/
 http://fireflyingup.github.io/categories/dockerfile/
@@ -39,3 +42,4 @@ http://fireflyingup.github.io/categories/Java/
 http://fireflyingup.github.io/categories/dubbo/
 http://fireflyingup.github.io/categories/cloud/
 http://fireflyingup.github.io/categories/kafka/
+http://fireflyingup.github.io/categories/mybatis/

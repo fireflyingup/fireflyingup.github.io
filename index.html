@@ -75,7 +75,7 @@
 <div class="widgets">
 <widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="站内搜索"><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
 
-<widget class="widget-wrapper recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2023/04/28/algorithm/"><span class="title">算法与数据结构</span></a><a class="item title" href="/2023/04/28/kafka/"><span class="title">kafka</span></a><a class="item title" href="/2023/12/28/cloud/"><span class="title">cloud</span></a><a class="item title" href="/2023/12/28/dubbo/"><span class="title">dubbo</span></a><a class="item title" href="/2022/04/21/%E9%9B%86%E5%90%88/"><span class="title">Java集合</span></a></div></widget>
+<widget class="widget-wrapper recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2023/10/20/mybatis/"><span class="title">mybatis</span></a><a class="item title" href="/2023/04/28/algorithm/"><span class="title">算法与数据结构</span></a><a class="item title" href="/2023/04/28/kafka/"><span class="title">kafka</span></a><a class="item title" href="/2023/12/28/cloud/"><span class="title">cloud</span></a><a class="item title" href="/2023/12/28/dubbo/"><span class="title">dubbo</span></a></div></widget>
 
 
 </div>
@@ -96,7 +96,14 @@
   
 
 <div class="nav-wrap"><nav class="sub post cap"><a class="active" href="/">近期发布</a><a href="/categories">分类</a><a href="/tags">标签</a><a href="/archives">归档</a></nav></div>
-  <div class="post-list post"><a class="post-card post " href="/2023/12/28/dubbo/">
+  <div class="post-list post"><a class="post-card post " href="/2024/02/26/spring/">
+<article class="md-text"><h2 class="post-title">2024-02-26</h2><div class="excerpt"><p>Spring的生命周期Spring 提供了多种不同的作用域（scope），它们决定了 Bean 的生命周期。
+
+ singleton：单例作用域，在整个应用中只有一个实例，该实例在 Spring 容器初始化时创建。
+ prototype：原型作用域，每次调用都会创建一个新的实例，而不是使用单例。
+ request：请求作用域，当前 HTTP 请求的生命周期内有效。
+ session：会话作用...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2024-02-26T02:07:52.803Z">2024-02-26</time></span></div></article>
+</a><a class="post-card post " href="/2023/12/28/dubbo/">
 <article class="md-text"><h2 class="post-title">dubbo</h2><div class="excerpt"><p>Dubbo负载均衡策略
 RandomLoadBalance:随机负载均衡。随机的选择一个。是Dubbo的默认负载均衡策略。
 RoundRobinLoadBalance:轮询负载均衡。轮询选择一个。
@@ -104,6 +111,9 @@ LeastActiveLoadBalance:最少活跃调用数，相同活跃数的随机。活跃
 </a><a class="post-card post " href="/2023/12/28/cloud/">
 <article class="md-text"><h2 class="post-title">cloud</h2><div class="excerpt"><p>Cloud负载均衡策略1.轮询策略轮询策略：RoundRobinRule，按照一定的顺序依次调用服务实例。比如一共有 3 个服务，第一次调用服务 1，第二次调用服务 2，第三次调用服务3，依次类推。 此策略的配置设置如下：
 123springcloud-nacos-provider: # nacos中的服务id  ribbon:    NFLoadBalancerRuleClassName:...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-12-28T02:09:01.000Z">2023-12-28</time></span><span class="cap breadcrumb">cloud</span></div></article>
+</a><a class="post-card post " href="/2023/10/20/mybatis/">
+<article class="md-text"><h2 class="post-title">mybatis</h2><div class="excerpt"><p>MyBatisMyBatis的作用MyBatis 是一流的持久性框架，支持自定义 SQL、存储过程和高级映射。 MyBatis 消除了几乎所有的 JDBC 代码以及手动设置参数和检索结果。 MyBatis 可以使用简单的 XML 或注释进行配置，并将原语、Map 接口和 Java POJO（普通旧 Java 对象）映射到数据库记录。
+源码解析MapperScan注解首先使用springboo...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-10-20T15:10:04.000Z">2023-10-20</time></span><span class="cap breadcrumb">mybatis</span></div></article>
 </a><a class="post-card post " href="/2023/04/28/algorithm/">
 <article class="md-text"><h2 class="post-title">算法与数据结构</h2><div class="excerpt"><p>排序
 
@@ -142,22 +152,6 @@ alpine：3.16.0
 准备先创建一个空的文件夹，创建一个Dokcerfile文件，注意D大些，f小写。
 准备redis-5.0.14的源码包(5.0.14版本直达)，也可以去所有版本处自行下载对应的版本。
 准备一个redis.conf配置文件...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-06-21T15:49:13.000Z">2022-06-21</time></span><span class="cap breadcrumb">dockerfile</span></div></article>
-</a><a class="post-card post " href="/2022/04/21/%E9%9B%86%E5%90%88/">
-<article class="md-text"><h2 class="post-title">Java集合</h2><div class="excerpt"><p>Collection
-
-ListArrayListArrayList是一个Object数组实现的数据结构，线程不安全
-默认初始化大小10
-1234/** * Default initial capacity. */private static final int DEFAULT_CAPACITY = 10;
-add方法
-123456789101112131415161718192021222...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-04-21T02:40:20.000Z">2022-04-21</time></span><span class="cap breadcrumb">Java</span></div></article>
-</a><a class="post-card post " href="/2021/12/12/log4j2-CVE-2021-44228-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
-<article class="md-text"><h2 class="post-title">log4j2(CVE-2021-44228)漏洞分析</h2><div class="excerpt"><p>介绍log4j 2是apache官方出品的日志框架，是对log4j的一个升级，目前在很多厂商的java项目中被广泛使用，影响力广泛，在2021年11月24日被阿里云团队发现。
-漏洞编号：CVE-2021-44228
-危害等级：严重
-CVSS评分：10
-影响版本：Apache Log4j 2.x &lt; 2.15.0
-复现poc如下：
-1234public static void main(...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2021-12-12T11:23:30.000Z">2021-12-12</time></span><span class="cap breadcrumb">漏洞分析</span></div></article>
 </a></div>
   
   <div class='paginator-wrap dis-select'>
