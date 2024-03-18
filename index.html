@@ -75,7 +75,7 @@
 <div class="widgets">
 <widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="站内搜索"><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
 
-<widget class="widget-wrapper recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2023/04/28/Go/"><span class="title">go</span></a><a class="item title" href="/2023/10/20/mybatis/"><span class="title">mybatis</span></a><a class="item title" href="/2023/04/28/algorithm/"><span class="title">算法与数据结构</span></a><a class="item title" href="/2023/04/28/kafka/"><span class="title">kafka</span></a><a class="item title" href="/2023/12/28/cloud/"><span class="title">cloud</span></a></div></widget>
+<widget class="widget-wrapper recent"><div class="widget-header cap theme dis-select"><span class="name">最近更新</span></div><div class="widget-body related-posts fs14"><a class="item title" href="/2024/03/12/Elasticsearch/"><span class="title">Elasticsearch</span></a><a class="item title" href="/2023/12/28/cloud/"><span class="title">cloud</span></a><a class="item title" href="/2023/04/28/kafka/"><span class="title">kafka</span></a><a class="item title" href="/2023/04/28/Go/"><span class="title">go</span></a><a class="item title" href="/2022/04/21/Java%E5%B9%B6%E5%8F%91/"><span class="title">Java并发</span></a></div></widget>
 
 
 </div>
@@ -96,7 +96,10 @@
   
 
 <div class="nav-wrap"><nav class="sub post cap"><a class="active" href="/">近期发布</a><a href="/categories">分类</a><a href="/tags">标签</a><a href="/archives">归档</a></nav></div>
-  <div class="post-list post"><a class="post-card post " href="/2024/02/26/spring/">
+  <div class="post-list post"><a class="post-card post " href="/2024/03/12/Elasticsearch/">
+<article class="md-text"><h2 class="post-title">Elasticsearch</h2><div class="excerpt"><p>Elasticsearch安装Elasticsearch下载
+12345# 官方下载地址：https://www.elastic.co/downloads/elasticsearch# 下载curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.12.2-linux-x86_64.tar.gz#...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2024-03-12T08:10:38.000Z">2024-03-12</time></span><span class="cap breadcrumb">Elasticsearch</span></div></article>
+</a><a class="post-card post " href="/2024/02/26/spring/">
 <article class="md-text"><h2 class="post-title">2024-02-26</h2><div class="excerpt"><p>Spring的生命周期Spring 提供了多种不同的作用域（scope），它们决定了 Bean 的生命周期。
 
  singleton：单例作用域，在整个应用中只有一个实例，该实例在 Spring 容器初始化时创建。
@@ -109,8 +112,11 @@ RandomLoadBalance:随机负载均衡。随机的选择一个。是Dubbo的默认
 RoundRobinLoadBalance:轮询负载均衡。轮询选择一个。
 LeastActiveLoadBalance:最少活跃调用数，相同活跃数的随机。活跃数指调用前后计数差。使慢的 Provider 收到更少请求，因为越慢的 Provider 的调用前后计数差会越大...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-12-28T02:09:01.000Z">2023-12-28</time></span><span class="cap breadcrumb">dubbo</span></div></article>
 </a><a class="post-card post " href="/2023/12/28/cloud/">
-<article class="md-text"><h2 class="post-title">cloud</h2><div class="excerpt"><p>Cloud负载均衡策略1.轮询策略轮询策略：RoundRobinRule，按照一定的顺序依次调用服务实例。比如一共有 3 个服务，第一次调用服务 1，第二次调用服务 2，第三次调用服务3，依次类推。 此策略的配置设置如下：
-123springcloud-nacos-provider: # nacos中的服务id  ribbon:    NFLoadBalancerRuleClassName:...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-12-28T02:09:01.000Z">2023-12-28</time></span><span class="cap breadcrumb">cloud</span></div></article>
+<article class="md-text"><h2 class="post-title">cloud</h2><div class="excerpt"><p>Cloud分布式系统的基本理论CAP理论CAP定理：一个分布式系统最多只能同时满足一致性（Consistence）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。
+
+  一致性：所有节点在同一时间的看到的数据相同。
+  可用性：读、写永远都能成功，即，服务一直可用。
+  分区容错性：即使系统的某个分区遇到严重的故障，系统能继续提供服务...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-12-28T02:09:01.000Z">2023-12-28</time></span><span class="cap breadcrumb">cloud</span></div></article>
 </a><a class="post-card post " href="/2023/10/20/mybatis/">
 <article class="md-text"><h2 class="post-title">mybatis</h2><div class="excerpt"><p>MyBatisMyBatis的作用MyBatis 是一流的持久性框架，支持自定义 SQL、存储过程和高级映射。 MyBatis 消除了几乎所有的 JDBC 代码以及手动设置参数和检索结果。 MyBatis 可以使用简单的 XML 或注释进行配置，并将原语、Map 接口和 Java POJO（普通旧 Java 对象）映射到数据库记录。
 源码解析MapperScan注解首先使用springboo...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-10-20T15:10:04.000Z">2023-10-20</time></span><span class="cap breadcrumb">mybatis</span></div></article>
@@ -122,7 +128,12 @@ LeastActiveLoadBalance:最少活跃调用数，相同活跃数的随机。活跃
 
 123456789101112131415public void sort(int[] array) &#123;  int length = array.length;  for (int i = 0; i &lt; length - 1; i++) &#123; ...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-04-28T02:09:01.000Z">2023-04-28</time></span><span class="cap breadcrumb">算法</span></div></article>
 </a><a class="post-card post " href="/2023/04/28/kafka/">
-<article class="md-text"><h2 class="post-title">kafka</h2><div class="excerpt"><p>Kafka</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-04-28T02:09:01.000Z">2023-04-28</time></span><span class="cap breadcrumb">kafka</span></div></article>
+<article class="md-text"><h2 class="post-title">kafka</h2><div class="excerpt"><p>Kafka控制器选举控制器是Kafka的核心组件，它的主要作用是在Zookeeper的帮助下管理和协调整个Kafka集群。集群中任意一个Broker都能充当控制器的角色，但在运行过程中，只能有一个Broker成为控制器。
+
+  控制器的作用可以查看文末
+
+控制器选举可以认为是Broker的选举。
+集群中第一个启动的Broker会通过在Zookeeper中创建临时节点/controller来让...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-04-28T02:09:01.000Z">2023-04-28</time></span><span class="cap breadcrumb">kafka</span></div></article>
 </a><a class="post-card post " href="/2023/04/28/Go/">
 <article class="md-text"><h2 class="post-title">go</h2><div class="excerpt"><p>基础命名命名规则：
 Go语言中的函数名、变量名、常量名、类型名、语句标号和包名等所有的命名，都遵循一个简单的命名规则：一个名字必须以一个字母（Unicode字母）或下划线开头，后面可以跟任意数量的字母、数字或下划线。
@@ -141,15 +152,6 @@ podtgres：10.21
 准备一个初始化脚本，主要用于创建数据库，用户等等。
 准备完之后文件里面内容如下
 12345678910╰─$ ls -altotal 50...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-06-21T15:49:26.000Z">2022-06-21</time></span><span class="cap breadcrumb">dockerfile</span></div></article>
-</a><a class="post-card post " href="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BAnginx%E9%95%9C%E5%83%8F/">
-<article class="md-text"><h2 class="post-title">dockerfile基于alpine构建nginx镜像</h2><div class="excerpt"><p>坏境docker：20.10.10
-nginx：1.18.0
-alpine：3.16.0
-准备先创建一个空的文件夹，创建一个Dokcerfile文件，注意D大些，f小写。
-准备nginx的源码包(版本直达)，也可以去nginx官网处自行下载对应的版本。
-准备一个nginx.conf配置文件，里面主要包含了我们对nginx的一些配置，如下其中某些配置需要修改。
-1daemon off ;
-准备...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-06-21T15:49:18.000Z">2022-06-21</time></span><span class="cap breadcrumb">dockerfile</span></div></article>
 </a></div>
   
   <div class='paginator-wrap dis-select'>

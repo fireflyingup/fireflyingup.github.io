@@ -1,9 +1,11 @@
+http://fireflyingup.github.io/2024/03/12/Elasticsearch/
+http://fireflyingup.github.io/2023/12/28/cloud/
+http://fireflyingup.github.io/2023/04/28/kafka/
 http://fireflyingup.github.io/2023/04/28/Go/
+http://fireflyingup.github.io/2022/04/21/Java%E5%B9%B6%E5%8F%91/
 http://fireflyingup.github.io/2023/10/20/mybatis/
 http://fireflyingup.github.io/2024/02/26/spring/
 http://fireflyingup.github.io/2023/04/28/algorithm/
-http://fireflyingup.github.io/2023/04/28/kafka/
-http://fireflyingup.github.io/2023/12/28/cloud/
 http://fireflyingup.github.io/2023/12/28/dubbo/
 http://fireflyingup.github.io/2022/04/21/%E9%9B%86%E5%90%88/
 http://fireflyingup.github.io/2021/12/12/log4j2-CVE-2021-44228-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/
@@ -34,6 +36,7 @@ http://fireflyingup.github.io/tags/cloud/
 http://fireflyingup.github.io/tags/kafka/
 http://fireflyingup.github.io/tags/mybatis/
 http://fireflyingup.github.io/tags/go/
+http://fireflyingup.github.io/tags/Elasticsearch/
 http://fireflyingup.github.io/categories/%E5%AE%89%E8%A3%85/
 http://fireflyingup.github.io/categories/%E7%AE%97%E6%B3%95/
 http://fireflyingup.github.io/categories/dockerfile/
@@ -46,3 +49,4 @@ http://fireflyingup.github.io/categories/cloud/
 http://fireflyingup.github.io/categories/kafka/
 http://fireflyingup.github.io/categories/mybatis/
 http://fireflyingup.github.io/categories/go/
+http://fireflyingup.github.io/categories/Elasticsearch/
