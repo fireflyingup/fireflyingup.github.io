@@ -1,8 +1,12 @@
+http://fireflyingup.github.io/2024/05/27/docker/
+http://fireflyingup.github.io/2024/06/05/java-study/juc/
+http://fireflyingup.github.io/2024/05/27/kubernetes%E4%BA%91%E5%8E%9F%E7%94%9F/
+http://fireflyingup.github.io/2023/04/28/Go/
+http://fireflyingup.github.io/2024/05/11/windows%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/
+http://fireflyingup.github.io/2024/04/10/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/
 http://fireflyingup.github.io/2024/03/12/Elasticsearch/
-http://fireflyingup.github.io/2024/03/30/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/
 http://fireflyingup.github.io/2023/12/28/cloud/
 http://fireflyingup.github.io/2023/04/28/kafka/
-http://fireflyingup.github.io/2023/04/28/Go/
 http://fireflyingup.github.io/2022/04/21/Java%E5%B9%B6%E5%8F%91/
 http://fireflyingup.github.io/2023/10/20/mybatis/
 http://fireflyingup.github.io/2024/02/26/spring/
@@ -38,6 +42,11 @@ http://fireflyingup.github.io/tags/kafka/
 http://fireflyingup.github.io/tags/mybatis/
 http://fireflyingup.github.io/tags/go/
 http://fireflyingup.github.io/tags/Elasticsearch/
+http://fireflyingup.github.io/tags/kubernetes/
+http://fireflyingup.github.io/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/
+http://fireflyingup.github.io/tags/windows%E3%80%81%E5%86%85%E6%A0%B8/
+http://fireflyingup.github.io/tags/juc/
+http://fireflyingup.github.io/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/
 http://fireflyingup.github.io/categories/%E5%AE%89%E8%A3%85/
 http://fireflyingup.github.io/categories/%E7%AE%97%E6%B3%95/
 http://fireflyingup.github.io/categories/dockerfile/
@@ -51,3 +60,4 @@ http://fireflyingup.github.io/categories/kafka/
 http://fireflyingup.github.io/categories/mybatis/
 http://fireflyingup.github.io/categories/go/
 http://fireflyingup.github.io/categories/Elasticsearch/
+http://fireflyingup.github.io/categories/windows%E5%86%85%E6%A0%B8/
