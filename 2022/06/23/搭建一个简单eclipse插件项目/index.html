@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>搭建一个简单eclipse插件项目 | Hexo</title>
+  <meta name="description" content="引言​    这里主要记录如何手把手搭建一个eclipse的插件项目。 引入插件​    由于eclipse插件开发需要plugin插件，所以要先去Help-&gt;Install New Software-&gt;选择对应ecipse版本的https:&#x2F;&#x2F;download.eclipse.org&#x2F;releases&#x2F;2022-06&#x2F;202206151000下载地址-&gt;选择General Pu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建一个简单eclipse插件项目">
+<meta property="og:url" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:site_name" content="Fire Flying&#39;s blog">
+<meta property="og:description" content="引言​    这里主要记录如何手把手搭建一个eclipse的插件项目。 引入插件​    由于eclipse插件开发需要plugin插件，所以要先去Help-&gt;Install New Software-&gt;选择对应ecipse版本的https:&#x2F;&#x2F;download.eclipse.org&#x2F;releases&#x2F;2022-06&#x2F;202206151000下载地址-&gt;选择General Pu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624001026541.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624001331584.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624001525493.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624001841133.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624002001614.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624004252862.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624005737022.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624005931465.png">
+<meta property="og:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624010043268.png">
+<meta property="article:published_time" content="2022-06-23T15:36:14.000Z">
+<meta property="article:modified_time" content="2023-12-19T01:38:53.822Z">
+<meta property="article:author" content="Fire Flying">
+<meta property="article:tag" content="eclipse">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624001026541.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Fire Flying&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/fireflyingup" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">fireflying</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/fireflyingup" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/cloud/">cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/dockerfile/">dockerfile</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/dubbo/">dubbo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/eclipse-plugins/">eclipse plugins</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/kafka/">kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/windows%E5%86%85%E6%A0%B8/">windows内核</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%89%E8%A3%85/">安装</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">漏洞分析</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cloud/" rel="tag">cloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker-compose/" rel="tag">docker-compose</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eclipse/" rel="tag">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/juc/" rel="tag">juc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/" rel="tag">mybatis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postgresql/" rel="tag">postgresql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows%E3%80%81%E5%86%85%E6%A0%B8/" rel="tag">windows、内核</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="tag">云原生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" rel="tag">漏洞分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/" rel="tag">线程安全</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Elasticsearch/" style="font-size: 13px;">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/cloud/" style="font-size: 13px;">cloud</a> <a href="/tags/docker-compose/" style="font-size: 13px;">docker-compose</a> <a href="/tags/dubbo/" style="font-size: 13px;">dubbo</a> <a href="/tags/eclipse/" style="font-size: 13px;">eclipse</a> <a href="/tags/go/" style="font-size: 13px;">go</a> <a href="/tags/juc/" style="font-size: 13px;">juc</a> <a href="/tags/kafka/" style="font-size: 13px;">kafka</a> <a href="/tags/kubernetes/" style="font-size: 13px;">kubernetes</a> <a href="/tags/mybatis/" style="font-size: 13px;">mybatis</a> <a href="/tags/nginx/" style="font-size: 14px;">nginx</a> <a href="/tags/postgresql/" style="font-size: 14px;">postgresql</a> <a href="/tags/redis/" style="font-size: 14px;">redis</a> <a href="/tags/windows%E3%80%81%E5%86%85%E6%A0%B8/" style="font-size: 13px;">windows、内核</a> <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" style="font-size: 13px;">云原生</a> <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" style="font-size: 13px;">漏洞分析</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/" style="font-size: 13px;">线程安全</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">六月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/05/">五月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/04/">四月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">三月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">二月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">四月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/05/java-study/juc/" class="title">juc-study</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-05T02:31:23.000Z" itemprop="datePublished">2024-06-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/27/docker/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-27T01:14:27.849Z" itemprop="datePublished">2024-05-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/27/kubernetes%E4%BA%91%E5%8E%9F%E7%94%9F/" class="title">kubernetes云原生</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-27T01:14:01.000Z" itemprop="datePublished">2024-05-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/windows%E5%86%85%E6%A0%B8/">windows内核</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/11/windows%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/" class="title">windows内核</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-11T15:10:04.000Z" itemprop="datePublished">2024-05-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/04/10/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-04-10T05:22:41.399Z" itemprop="datePublished">2024-04-10</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-搭建一个简单eclipse插件项目" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      搭建一个简单eclipse插件项目
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/" class="article-date">
+	  <time datetime="2022-06-23T15:36:14.000Z" itemprop="datePublished">2022-06-23</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/eclipse-plugins/">eclipse plugins</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/eclipse/" rel="tag">eclipse</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>​    这里主要记录如何手把手搭建一个eclipse的插件项目。</p>
+<h2 id="引入插件"><a href="#引入插件" class="headerlink" title="引入插件"></a>引入插件</h2><p>​    由于eclipse插件开发需要plugin插件，所以要先去Help-&gt;Install New Software-&gt;选择对应ecipse版本的<a target="_blank" rel="noopener" href="https://download.eclipse.org/releases/2022-06/202206151000%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80-&gt;%E9%80%89%E6%8B%A9General">https://download.eclipse.org/releases/2022-06/202206151000下载地址-&gt;选择General</a> Purpose Tools下的Eclipse Plug-in Development Environment，然后一路next-&gt;accept-&gt;finish，重启就可以创建一个plugin项目了。</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624001026541.png"></div></div>
+
+<h2 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h2><p>填入项目名称</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624001331584.png"></div></div>
+
+<p>点击next，填写vender信息，勾选Generate an activator</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624001525493.png"></div></div>
+
+<p>点击next，选择创建一个模版，这里选择hello world。</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624001841133.png"></div></div>
+
+<p>点击next，构建一个handler。</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624002001614.png"></div></div>
+
+<p>创建完之后我们看下目录结构</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624004252862.png"></div></div>
+
+<h2 id="文件分析"><a href="#文件分析" class="headerlink" title="文件分析"></a>文件分析</h2><p>目录里面主要的是plugin.xml这个文件，下面对这个文件进行解析，梳理页面与执行SampleHandler的逻辑。</p>
+<p>plugin.xml文件如下</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line">&lt;?eclipse version=&quot;3.4&quot;?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   &lt;extension</span><br><span class="line">         point=&quot;org.eclipse.ui.commands&quot;&gt;</span><br><span class="line">      &lt;category</span><br><span class="line">            id=&quot;demo1.commands.category&quot;</span><br><span class="line">            name=&quot;Sample Category&quot;&gt;</span><br><span class="line">      <span class="tag">&lt;/<span class="name">category</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- 这里定义一个command id为demo1.commands.sampleCommand --&gt;</span></span><br><span class="line">      &lt;command</span><br><span class="line">            categoryId=&quot;demo1.commands.category&quot;</span><br><span class="line">            name=&quot;Sample Command&quot;</span><br><span class="line">            id=&quot;demo1.commands.sampleCommand&quot;&gt; </span><br><span class="line">      <span class="tag">&lt;/<span class="name">command</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">extension</span>&gt;</span></span><br><span class="line">   &lt;extension</span><br><span class="line">         point=&quot;org.eclipse.ui.handlers&quot;&gt;</span><br><span class="line">     <span class="comment">&lt;!-- 将上面定义的command 指定handler处理器，也就是SampleHandler这个类 --&gt;</span></span><br><span class="line">      &lt;handler</span><br><span class="line">            class=&quot;demo1.handlers.SampleHandler&quot;</span><br><span class="line">            commandId=&quot;demo1.commands.sampleCommand&quot;&gt;</span><br><span class="line">      <span class="tag">&lt;/<span class="name">handler</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">extension</span>&gt;</span></span><br><span class="line">   &lt;extension</span><br><span class="line">         point=&quot;org.eclipse.ui.bindings&quot;&gt;</span><br><span class="line">      &lt;key</span><br><span class="line">            commandId=&quot;demo1.commands.sampleCommand&quot;</span><br><span class="line">            schemeId=&quot;org.eclipse.ui.defaultAcceleratorConfiguration&quot;</span><br><span class="line">            contextId=&quot;org.eclipse.ui.contexts.window&quot;</span><br><span class="line">            sequence=&quot;M1+6&quot;&gt;</span><br><span class="line">      <span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">extension</span>&gt;</span></span><br><span class="line">   &lt;extension</span><br><span class="line">         point=&quot;org.eclipse.ui.menus&quot;&gt;</span><br><span class="line">      &lt;menuContribution</span><br><span class="line">            locationURI=&quot;menu:org.eclipse.ui.main.menu?after=additions&quot;&gt;</span><br><span class="line">        <span class="comment">&lt;!-- 指定一个菜单，菜单显示为Sample Menu --&gt;</span></span><br><span class="line">         &lt;menu</span><br><span class="line">               id=&quot;demo1.menus.sampleMenu&quot;</span><br><span class="line">               label=&quot;Sample Menu&quot;</span><br><span class="line">               mnemonic=&quot;M&quot;&gt;</span><br><span class="line">           <span class="comment">&lt;!-- 将前面注册的command绑定到这个菜单里面 --&gt;</span></span><br><span class="line">            &lt;command</span><br><span class="line">                  commandId=&quot;demo1.commands.sampleCommand&quot;</span><br><span class="line">                  id=&quot;demo1.menus.sampleCommand&quot;</span><br><span class="line">                  mnemonic=&quot;S&quot;&gt;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">command</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">menu</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">menuContribution</span>&gt;</span></span><br><span class="line">      &lt;menuContribution</span><br><span class="line">            locationURI=&quot;toolbar:org.eclipse.ui.main.toolbar?after=additions&quot;&gt;</span><br><span class="line">         &lt;toolbar</span><br><span class="line">               id=&quot;demo1.toolbars.sampleToolbar&quot;&gt;</span><br><span class="line">            &lt;command</span><br><span class="line">                  id=&quot;demo1.toolbars.sampleCommand&quot;</span><br><span class="line">                  commandId=&quot;demo1.commands.sampleCommand&quot;</span><br><span class="line">                  icon=&quot;icons/sample.png&quot;</span><br><span class="line">                  tooltip=&quot;Say hello world&quot;&gt;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">command</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">toolbar</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">menuContribution</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">extension</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>SampleHandler.java 文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo1.handlers;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.eclipse.core.commands.AbstractHandler;</span><br><span class="line"><span class="keyword">import</span> org.eclipse.core.commands.ExecutionEvent;</span><br><span class="line"><span class="keyword">import</span> org.eclipse.core.commands.ExecutionException;</span><br><span class="line"><span class="keyword">import</span> org.eclipse.ui.IWorkbenchWindow;</span><br><span class="line"><span class="keyword">import</span> org.eclipse.ui.handlers.HandlerUtil;</span><br><span class="line"><span class="keyword">import</span> org.eclipse.jface.dialogs.MessageDialog;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SampleHandler</span> <span class="keyword">extends</span> <span class="title">AbstractHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">execute</span><span class="params">(ExecutionEvent event)</span> <span class="keyword">throws</span> ExecutionException </span>&#123;</span><br><span class="line">		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);</span><br><span class="line">    <span class="comment">// 推送弹窗，打印Hello, This is a demo plugin!!!</span></span><br><span class="line">		MessageDialog.openInformation(</span><br><span class="line">				window.getShell(),</span><br><span class="line">				<span class="string">&quot;Demo1&quot;</span>,</span><br><span class="line">				<span class="string">&quot;Hello, This is a demo plugin!!!&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>还有一个Activator类，这个是对插件的生命周期进行管理</p>
+<table>
+<thead>
+<tr>
+<th>getDefault()</th>
+<th>取得插件类的实例的方法。插件类是单例的，所以这个方法作为一个静态方法提供。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>start()</td>
+<td>插件开始时的处理。</td>
+</tr>
+<tr>
+<td>stop()</td>
+<td>插件停止时的处理。</td>
+</tr>
+<tr>
+<td>getLog()</td>
+<td>log输出时取得ILog用的方法。</td>
+</tr>
+<tr>
+<td>getImageRegistry()</td>
+<td>取得管理插件内图像的ImageRegistry类。</td>
+</tr>
+<tr>
+<td>getPerferenceStore()</td>
+<td>取得保存插件设定的IPerferenceStore类。</td>
+</tr>
+<tr>
+<td>getDialogSettings()</td>
+<td>取得保存对话框设定的IDialogSettings类。</td>
+</tr>
+<tr>
+<td>getWorkbench()</td>
+<td>取得IWorkbench的实例。</td>
+</tr>
+</tbody></table>
+<h2 id="执行调试插件"><a href="#执行调试插件" class="headerlink" title="执行调试插件"></a>执行调试插件</h2><p>点击左上角的绿色启动按钮</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624005737022.png"></div></div>
+
+<p>可以看到会新打开一个带有插件的eclipse，可以看到在菜单栏已经有变化，就是插件生效了</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624005931465.png"></div></div>
+
+<p>接下来我们点击菜单栏的Sample Command，可以看到以下输出</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/image-20220624010043268.png"></div></div>
+
+<p>到此，一个简单的eclipse插件就开发完毕了。</p>
+<p>参考链接：</p>
+<p>引入插件：<a target="_blank" rel="noopener" href="https://blog.csdn.net/feinifi/article/details/103088082">https://blog.csdn.net/feinifi/article/details/103088082</a></p>
+<p>插件开发：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/liuzhuo">https://www.cnblogs.com/liuzhuo</a></p>
+<p>插件开发：<a target="_blank" rel="noopener" href="https://blog.csdn.net/feinifi/article/details/106773644">https://blog.csdn.net/feinifi/article/details/106773644</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://fireflyingup.github.io/2022/06/23/%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95eclipse%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE/" title="搭建一个简单eclipse插件项目" target="_blank" rel="external">http://fireflyingup.github.io/2022/06/23/搭建一个简单eclipse插件项目/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/fireflyingup" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/fireflyingup" target="_blank"><span class="text-dark">fireflying</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/04/28/Go/" title="go"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/06/21/dockerfile%E5%9F%BA%E4%BA%8Ealpine%E6%9E%84%E5%BB%BApostgresql%E9%95%9C%E5%83%8F/" title="dockerfile基于alpine构建postgresql镜像"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/fireflyingup" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

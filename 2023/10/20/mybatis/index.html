@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>mybatis | Hexo</title>
+  <meta name="description" content="MyBatisMyBatis的作用MyBatis 是一流的持久性框架，支持自定义 SQL、存储过程和高级映射。 MyBatis 消除了几乎所有的 JDBC 代码以及手动设置参数和检索结果。 MyBatis 可以使用简单的 XML 或注释进行配置，并将原语、Map 接口和 Java POJO（普通旧 Java 对象）映射到数据库记录。 源码解析MapperScan注解首先使用springboot的时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mybatis">
+<meta property="og:url" content="http://fireflyingup.github.io/2023/10/20/mybatis/index.html">
+<meta property="og:site_name" content="Fire Flying&#39;s blog">
+<meta property="og:description" content="MyBatisMyBatis的作用MyBatis 是一流的持久性框架，支持自定义 SQL、存储过程和高级映射。 MyBatis 消除了几乎所有的 JDBC 代码以及手动设置参数和检索结果。 MyBatis 可以使用简单的 XML 或注释进行配置，并将原语、Map 接口和 Java POJO（普通旧 Java 对象）映射到数据库记录。 源码解析MapperScan注解首先使用springboot的时">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://fireflyingup.github.io/2023/10/20/mybatis/image-20240305155512827.png">
+<meta property="article:published_time" content="2023-10-20T15:10:04.000Z">
+<meta property="article:modified_time" content="2024-03-05T08:08:32.811Z">
+<meta property="article:author" content="Fire Flying">
+<meta property="article:tag" content="mybatis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://fireflyingup.github.io/2023/10/20/mybatis/image-20240305155512827.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://fireflyingup.github.io/2023/10/20/mybatis/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Fire Flying&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/fireflyingup" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">fireflying</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Java Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/fireflyingup" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/cloud/">cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/dockerfile/">dockerfile</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/dubbo/">dubbo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/eclipse-plugins/">eclipse plugins</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/kafka/">kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mybatis/">mybatis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/windows%E5%86%85%E6%A0%B8/">windows内核</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%89%E8%A3%85/">安装</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">漏洞分析</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cloud/" rel="tag">cloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker-compose/" rel="tag">docker-compose</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eclipse/" rel="tag">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/juc/" rel="tag">juc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka/" rel="tag">kafka</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kubernetes/" rel="tag">kubernetes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/" rel="tag">mybatis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postgresql/" rel="tag">postgresql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows%E3%80%81%E5%86%85%E6%A0%B8/" rel="tag">windows、内核</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="tag">云原生</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" rel="tag">漏洞分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/" rel="tag">线程安全</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Elasticsearch/" style="font-size: 13px;">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/cloud/" style="font-size: 13px;">cloud</a> <a href="/tags/docker-compose/" style="font-size: 13px;">docker-compose</a> <a href="/tags/dubbo/" style="font-size: 13px;">dubbo</a> <a href="/tags/eclipse/" style="font-size: 13px;">eclipse</a> <a href="/tags/go/" style="font-size: 13px;">go</a> <a href="/tags/juc/" style="font-size: 13px;">juc</a> <a href="/tags/kafka/" style="font-size: 13px;">kafka</a> <a href="/tags/kubernetes/" style="font-size: 13px;">kubernetes</a> <a href="/tags/mybatis/" style="font-size: 13px;">mybatis</a> <a href="/tags/nginx/" style="font-size: 14px;">nginx</a> <a href="/tags/postgresql/" style="font-size: 14px;">postgresql</a> <a href="/tags/redis/" style="font-size: 14px;">redis</a> <a href="/tags/windows%E3%80%81%E5%86%85%E6%A0%B8/" style="font-size: 13px;">windows、内核</a> <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" style="font-size: 13px;">云原生</a> <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" style="font-size: 13px;">漏洞分析</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/" style="font-size: 13px;">线程安全</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">六月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/05/">五月 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/04/">四月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">三月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">二月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">四月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/05/java-study/juc/" class="title">juc-study</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-05T02:31:23.000Z" itemprop="datePublished">2024-06-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/27/docker/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-27T01:14:27.849Z" itemprop="datePublished">2024-05-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/27/kubernetes%E4%BA%91%E5%8E%9F%E7%94%9F/" class="title">kubernetes云原生</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-27T01:14:01.000Z" itemprop="datePublished">2024-05-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/windows%E5%86%85%E6%A0%B8/">windows内核</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/11/windows%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/" class="title">windows内核</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-11T15:10:04.000Z" itemprop="datePublished">2024-05-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/04/10/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-04-10T05:22:41.399Z" itemprop="datePublished">2024-04-10</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-mybatis" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mybatis
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/10/20/mybatis/" class="article-date">
+	  <time datetime="2023-10-20T15:10:04.000Z" itemprop="datePublished">2023-10-20</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/mybatis/">mybatis</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/mybatis/" rel="tag">mybatis</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/10/20/mybatis/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h2><h3 id="MyBatis的作用"><a href="#MyBatis的作用" class="headerlink" title="MyBatis的作用"></a>MyBatis的作用</h3><p>MyBatis 是一流的持久性框架，支持自定义 SQL、存储过程和高级映射。 MyBatis 消除了几乎所有的 JDBC 代码以及手动设置参数和检索结果。 MyBatis 可以使用简单的 XML 或注释进行配置，并将原语、Map 接口和 Java POJO（普通旧 Java 对象）映射到数据库记录。</p>
+<h3 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h3><h4 id="MapperScan注解"><a href="#MapperScan注解" class="headerlink" title="MapperScan注解"></a>MapperScan注解</h4><p>首先使用springboot的时候都需要在启动类上面写这个注解，并且标注basePackages是扫描的包前缀，通过这个basePackages，Mybatis会实现自己的代理类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Import(&#123;MapperScannerRegistrar.class&#125;)</span></span><br><span class="line"><span class="meta">@Repeatable(MapperScans.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MapperScan &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>这个MapperScan注解上面有个@Import，表示这里面的类先去初始化，那我们深入MapperScannerRegistrar这个类。</p>
+<h4 id="MapperScannerRegistrar"><a href="#MapperScannerRegistrar" class="headerlink" title="MapperScannerRegistrar"></a>MapperScannerRegistrar</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MapperScannerRegistrar</span> <span class="keyword">implements</span> <span class="title">ImportBeanDefinitionRegistrar</span>, <span class="title">ResourceLoaderAware</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>首先MapperScannerRegistrar实现了ImportBeanDefinitionRegistrar和ResourceLoaderAware两个接口类，ResourceLoaderAware的这个接口类有个setResourceLoader(ResourceLoader resourceLoader)的接口，但是MapperScannerRegistrar里面并没有实现，并且已经被@Deprecated弃用了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="meta">@Deprecated</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setResourceLoader</span><span class="params">(ResourceLoader resourceLoader)</span> </span>&#123;</span><br><span class="line">   <span class="comment">// NOP</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>主要就是ImportBeanDefinitionRegistrar这个接口类的实现了，我们看一下他的registerBeanDefinitions实现，主要是针对MapperScannerConfigurer类生成了一个Bean的定义，然后加入@MapperScan注解里面参数的值，并使用BeanDefinitionRegistry的registerBeanDefinition注册到容器里面。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerBeanDefinitions</span><span class="params">(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry)</span> </span>&#123;</span><br><span class="line">  AnnotationAttributes mapperScanAttrs = AnnotationAttributes</span><br><span class="line">      .fromMap(importingClassMetadata.getAnnotationAttributes(MapperScan.class.getName()));</span><br><span class="line">  <span class="keyword">if</span> (mapperScanAttrs != <span class="keyword">null</span>) &#123;</span><br><span class="line">    registerBeanDefinitions(importingClassMetadata, mapperScanAttrs, registry,</span><br><span class="line">        generateBaseBeanName(importingClassMetadata, <span class="number">0</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">registerBeanDefinitions</span><span class="params">(AnnotationMetadata annoMeta, AnnotationAttributes annoAttrs,</span></span></span><br><span class="line"><span class="function"><span class="params">    BeanDefinitionRegistry registry, String beanName)</span> </span>&#123;</span><br><span class="line"><span class="comment">// 通过MapperScannerConfigurer类生成Bean定义构造器</span></span><br><span class="line">  BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);</span><br><span class="line">  <span class="comment">// 下面都是在@MapperScan注解里面拿属性值塞到BeanDefinitionBuilder里面</span></span><br><span class="line">  builder.addPropertyValue(<span class="string">&quot;processPropertyPlaceHolders&quot;</span>, annoAttrs.getBoolean(<span class="string">&quot;processPropertyPlaceHolders&quot;</span>));</span><br><span class="line"></span><br><span class="line">  Class&lt;? extends Annotation&gt; annotationClass = annoAttrs.getClass(<span class="string">&quot;annotationClass&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (!Annotation.class.equals(annotationClass)) &#123;</span><br><span class="line">    builder.addPropertyValue(<span class="string">&quot;annotationClass&quot;</span>, annotationClass);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Class&lt;?&gt; markerInterface = annoAttrs.getClass(<span class="string">&quot;markerInterface&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (!Class.class.equals(markerInterface)) &#123;</span><br><span class="line">    builder.addPropertyValue(<span class="string">&quot;markerInterface&quot;</span>, markerInterface);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Class&lt;? extends BeanNameGenerator&gt; generatorClass = annoAttrs.getClass(<span class="string">&quot;nameGenerator&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (!BeanNameGenerator.class.equals(generatorClass)) &#123;</span><br><span class="line">    builder.addPropertyValue(<span class="string">&quot;nameGenerator&quot;</span>, BeanUtils.instantiateClass(generatorClass));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Class&lt;? extends MapperFactoryBean&gt; mapperFactoryBeanClass = annoAttrs.getClass(<span class="string">&quot;factoryBean&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (!MapperFactoryBean.class.equals(mapperFactoryBeanClass)) &#123;</span><br><span class="line">    builder.addPropertyValue(<span class="string">&quot;mapperFactoryBeanClass&quot;</span>, mapperFactoryBeanClass);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  String sqlSessionTemplateRef = annoAttrs.getString(<span class="string">&quot;sqlSessionTemplateRef&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (StringUtils.hasText(sqlSessionTemplateRef)) &#123;</span><br><span class="line">    builder.addPropertyValue(<span class="string">&quot;sqlSessionTemplateBeanName&quot;</span>, annoAttrs.getString(<span class="string">&quot;sqlSessionTemplateRef&quot;</span>));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  String sqlSessionFactoryRef = annoAttrs.getString(<span class="string">&quot;sqlSessionFactoryRef&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (StringUtils.hasText(sqlSessionFactoryRef)) &#123;</span><br><span class="line">    builder.addPropertyValue(<span class="string">&quot;sqlSessionFactoryBeanName&quot;</span>, annoAttrs.getString(<span class="string">&quot;sqlSessionFactoryRef&quot;</span>));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  List&lt;String&gt; basePackages = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">  basePackages.addAll(Arrays.stream(annoAttrs.getStringArray(<span class="string">&quot;basePackages&quot;</span>)).filter(StringUtils::hasText)</span><br><span class="line">      .collect(Collectors.toList()));</span><br><span class="line"></span><br><span class="line">  basePackages.addAll(Arrays.stream(annoAttrs.getClassArray(<span class="string">&quot;basePackageClasses&quot;</span>)).map(ClassUtils::getPackageName)</span><br><span class="line">      .collect(Collectors.toList()));</span><br><span class="line"><span class="comment">// 如果没有指定basePackage和basepackageClasses，那么就默认扫描@MapperScan注解这个类的文件夹下面。</span></span><br><span class="line">  <span class="keyword">if</span> (basePackages.isEmpty()) &#123;</span><br><span class="line">    basePackages.add(getDefaultBasePackage(annoMeta));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  String lazyInitialization = annoAttrs.getString(<span class="string">&quot;lazyInitialization&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (StringUtils.hasText(lazyInitialization)) &#123;</span><br><span class="line">    builder.addPropertyValue(<span class="string">&quot;lazyInitialization&quot;</span>, lazyInitialization);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  String defaultScope = annoAttrs.getString(<span class="string">&quot;defaultScope&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (!AbstractBeanDefinition.SCOPE_DEFAULT.equals(defaultScope)) &#123;</span><br><span class="line">    builder.addPropertyValue(<span class="string">&quot;defaultScope&quot;</span>, defaultScope);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  builder.addPropertyValue(<span class="string">&quot;basePackage&quot;</span>, StringUtils.collectionToCommaDelimitedString(basePackages));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// for spring-native</span></span><br><span class="line">  builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 这里去注册这个bean到容器里面</span></span><br><span class="line">  registry.registerBeanDefinition(beanName, builder.getBeanDefinition());</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">generateBaseBeanName</span><span class="params">(AnnotationMetadata importingClassMetadata, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> importingClassMetadata.getClassName() + <span class="string">&quot;#&quot;</span> + MapperScannerRegistrar.class.getSimpleName() + <span class="string">&quot;#&quot;</span> + index;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">getDefaultBasePackage</span><span class="params">(AnnotationMetadata importingClassMetadata)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> ClassUtils.getPackageName(importingClassMetadata.getClassName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>既然注册了MapperScannerConfigurer这个bean，那我们去看看这个类的情况。</p>
+<h4 id="MapperScannerConfigurer"><a href="#MapperScannerConfigurer" class="headerlink" title="MapperScannerConfigurer"></a>MapperScannerConfigurer</h4><p>首先我们看一下类的定义</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MapperScannerConfigurer</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">BeanDefinitionRegistryPostProcessor</span>, <span class="title">InitializingBean</span>, <span class="title">ApplicationContextAware</span>, <span class="title">BeanNameAware</span> </span></span><br></pre></td></tr></table></figure>
+<p>可以看到实现了四个接口，都是spring提供的接口。</p>
+<p>BeanNameAware的setBeanName()方法和ApplicationContextAware的setApplicationContext()方法分别传入了上下文和bean名称，InitializingBean的afterPropertiesSet方法主要对basePackage进行了一个判空处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setApplicationContext</span><span class="params">(ApplicationContext applicationContext)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.applicationContext = applicationContext;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * &#123;<span class="doctag">@inheritDoc</span>&#125;</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBeanName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.beanName = name;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">   notNull(<span class="keyword">this</span>.basePackage, <span class="string">&quot;Property &#x27;basePackage&#x27; is required&quot;</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>主要的是BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry方法，里面定义了一个ClassPathMapperScanner类，最后调用了他的scan()方法。</p>
+<h4 id="ClassPathMapperScanner"><a href="#ClassPathMapperScanner" class="headerlink" title="ClassPathMapperScanner"></a>ClassPathMapperScanner</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postProcessBeanDefinitionRegistry</span><span class="params">(BeanDefinitionRegistry registry)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.processPropertyPlaceHolders) &#123;</span><br><span class="line">    processPropertyPlaceHolders();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ClassPathMapperScanner scanner = <span class="keyword">new</span> ClassPathMapperScanner(registry);</span><br><span class="line">  scanner.setAddToConfig(<span class="keyword">this</span>.addToConfig);</span><br><span class="line">  scanner.setAnnotationClass(<span class="keyword">this</span>.annotationClass);</span><br><span class="line">  scanner.setMarkerInterface(<span class="keyword">this</span>.markerInterface);</span><br><span class="line">  scanner.setSqlSessionFactory(<span class="keyword">this</span>.sqlSessionFactory);</span><br><span class="line">  scanner.setSqlSessionTemplate(<span class="keyword">this</span>.sqlSessionTemplate);</span><br><span class="line">  scanner.setSqlSessionFactoryBeanName(<span class="keyword">this</span>.sqlSessionFactoryBeanName);</span><br><span class="line">  scanner.setSqlSessionTemplateBeanName(<span class="keyword">this</span>.sqlSessionTemplateBeanName);</span><br><span class="line">  scanner.setResourceLoader(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">  scanner.setBeanNameGenerator(<span class="keyword">this</span>.nameGenerator);</span><br><span class="line">  scanner.setMapperFactoryBeanClass(<span class="keyword">this</span>.mapperFactoryBeanClass);</span><br><span class="line">  <span class="keyword">if</span> (StringUtils.hasText(lazyInitialization)) &#123;</span><br><span class="line">    scanner.setLazyInitialization(Boolean.valueOf(lazyInitialization));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (StringUtils.hasText(defaultScope)) &#123;</span><br><span class="line">    scanner.setDefaultScope(defaultScope);</span><br><span class="line">  &#125;</span><br><span class="line">  scanner.registerFilters();</span><br><span class="line">  scanner.scan(</span><br><span class="line">      StringUtils.tokenizeToStringArray(<span class="keyword">this</span>.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>scan方法最后会调用doScan方法，而ClassPathMapperScanner对ClassPathBeanDefinitionScanner的doScan方法进行了重写。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Set&lt;BeanDefinitionHolder&gt; <span class="title">doScan</span><span class="params">(String... basePackages)</span> </span>&#123;</span><br><span class="line">  Set&lt;BeanDefinitionHolder&gt; beanDefinitions = <span class="keyword">super</span>.doScan(basePackages);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (beanDefinitions.isEmpty()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (printWarnLogIfNotFoundMappers) &#123;</span><br><span class="line">      LOGGER.warn(() -&gt; <span class="string">&quot;No MyBatis mapper was found in &#x27;&quot;</span> + Arrays.toString(basePackages)</span><br><span class="line">          + <span class="string">&quot;&#x27; package. Please check your configuration.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    processBeanDefinitions(beanDefinitions);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> beanDefinitions;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>doScan方法里面的processBeanDefinitions(beanDefinitions) 主要对basePackages下面扫描出来的beanDefinition进行了重新定义，最主要的是definition.setBeanClass(this.mapperFactoryBeanClass)，将bean的class设置为MapperFactoryBean.class，将bean之前的className放入mapperInterface这个参数里面，MapperFactoryBean继承了SqlSessionDaoSupport方法，并实现了FactoryBean接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Set&lt;BeanDefinitionHolder&gt; <span class="title">doScan</span><span class="params">(String... basePackages)</span> </span>&#123;</span><br><span class="line">  Set&lt;BeanDefinitionHolder&gt; beanDefinitions = <span class="keyword">super</span>.doScan(basePackages);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (beanDefinitions.isEmpty()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (printWarnLogIfNotFoundMappers) &#123;</span><br><span class="line">      LOGGER.warn(() -&gt; <span class="string">&quot;No MyBatis mapper was found in &#x27;&quot;</span> + Arrays.toString(basePackages)</span><br><span class="line">          + <span class="string">&quot;&#x27; package. Please check your configuration.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    processBeanDefinitions(beanDefinitions);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> beanDefinitions;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">processBeanDefinitions</span><span class="params">(Set&lt;BeanDefinitionHolder&gt; beanDefinitions)</span> </span>&#123;</span><br><span class="line">  AbstractBeanDefinition definition;</span><br><span class="line">  BeanDefinitionRegistry registry = getRegistry();</span><br><span class="line">  <span class="keyword">for</span> (BeanDefinitionHolder holder : beanDefinitions) &#123;</span><br><span class="line">    definition = (AbstractBeanDefinition) holder.getBeanDefinition();</span><br><span class="line">    <span class="keyword">boolean</span> scopedProxy = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (ScopedProxyFactoryBean.class.getName().equals(definition.getBeanClassName())) &#123;</span><br><span class="line">      definition = (AbstractBeanDefinition) Optional</span><br><span class="line">          .ofNullable(((RootBeanDefinition) definition).getDecoratedDefinition())</span><br><span class="line">          .map(BeanDefinitionHolder::getBeanDefinition).orElseThrow(() -&gt; <span class="keyword">new</span> IllegalStateException(</span><br><span class="line">              <span class="string">&quot;The target bean definition of scoped proxy bean not found. Root bean definition[&quot;</span> + holder + <span class="string">&quot;]&quot;</span>));</span><br><span class="line">      scopedProxy = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    String beanClassName = definition.getBeanClassName();</span><br><span class="line">    LOGGER.debug(() -&gt; <span class="string">&quot;Creating MapperFactoryBean with name &#x27;&quot;</span> + holder.getBeanName() + <span class="string">&quot;&#x27; and &#x27;&quot;</span> + beanClassName</span><br><span class="line">        + <span class="string">&quot;&#x27; mapperInterface&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// the mapper interface is the original class of the bean</span></span><br><span class="line">    <span class="comment">// but, the actual class of the bean is MapperFactoryBean</span></span><br><span class="line">    definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); <span class="comment">// issue #59</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      Class&lt;?&gt; beanClass = Resources.classForName(beanClassName);</span><br><span class="line">      <span class="comment">// Attribute for MockitoPostProcessor</span></span><br><span class="line">      <span class="comment">// https://github.com/mybatis/spring-boot-starter/issues/475</span></span><br><span class="line">      definition.setAttribute(FACTORY_BEAN_OBJECT_TYPE, beanClass);</span><br><span class="line">      <span class="comment">// for spring-native</span></span><br><span class="line">      definition.getPropertyValues().add(<span class="string">&quot;mapperInterface&quot;</span>, beanClass);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException ignore) &#123;</span><br><span class="line">      <span class="comment">// ignore</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    definition.setBeanClass(<span class="keyword">this</span>.mapperFactoryBeanClass);</span><br><span class="line"></span><br><span class="line">    definition.getPropertyValues().add(<span class="string">&quot;addToConfig&quot;</span>, <span class="keyword">this</span>.addToConfig);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">boolean</span> explicitFactoryUsed = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(<span class="keyword">this</span>.sqlSessionFactoryBeanName)) &#123;</span><br><span class="line">      definition.getPropertyValues().add(<span class="string">&quot;sqlSessionFactory&quot;</span>,</span><br><span class="line">          <span class="keyword">new</span> RuntimeBeanReference(<span class="keyword">this</span>.sqlSessionFactoryBeanName));</span><br><span class="line">      explicitFactoryUsed = <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.sqlSessionFactory != <span class="keyword">null</span>) &#123;</span><br><span class="line">      definition.getPropertyValues().add(<span class="string">&quot;sqlSessionFactory&quot;</span>, <span class="keyword">this</span>.sqlSessionFactory);</span><br><span class="line">      explicitFactoryUsed = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(<span class="keyword">this</span>.sqlSessionTemplateBeanName)) &#123;</span><br><span class="line">      <span class="keyword">if</span> (explicitFactoryUsed) &#123;</span><br><span class="line">        LOGGER.warn(</span><br><span class="line">            () -&gt; <span class="string">&quot;Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored.&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      definition.getPropertyValues().add(<span class="string">&quot;sqlSessionTemplate&quot;</span>,</span><br><span class="line">          <span class="keyword">new</span> RuntimeBeanReference(<span class="keyword">this</span>.sqlSessionTemplateBeanName));</span><br><span class="line">      explicitFactoryUsed = <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.sqlSessionTemplate != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (explicitFactoryUsed) &#123;</span><br><span class="line">        LOGGER.warn(</span><br><span class="line">            () -&gt; <span class="string">&quot;Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored.&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      definition.getPropertyValues().add(<span class="string">&quot;sqlSessionTemplate&quot;</span>, <span class="keyword">this</span>.sqlSessionTemplate);</span><br><span class="line">      explicitFactoryUsed = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!explicitFactoryUsed) &#123;</span><br><span class="line">      LOGGER.debug(() -&gt; <span class="string">&quot;Enabling autowire by type for MapperFactoryBean with name &#x27;&quot;</span> + holder.getBeanName() + <span class="string">&quot;&#x27;.&quot;</span>);</span><br><span class="line">      definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    definition.setLazyInit(lazyInitialization);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (scopedProxy) &#123;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ConfigurableBeanFactory.SCOPE_SINGLETON.equals(definition.getScope()) &amp;&amp; defaultScope != <span class="keyword">null</span>) &#123;</span><br><span class="line">      definition.setScope(defaultScope);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!definition.isSingleton()) &#123;</span><br><span class="line">      BeanDefinitionHolder proxyHolder = ScopedProxyUtils.createScopedProxy(holder, registry, <span class="keyword">true</span>);</span><br><span class="line">      <span class="keyword">if</span> (registry.containsBeanDefinition(proxyHolder.getBeanName())) &#123;</span><br><span class="line">        registry.removeBeanDefinition(proxyHolder.getBeanName());</span><br><span class="line">      &#125;</span><br><span class="line">      registry.registerBeanDefinition(proxyHolder.getBeanName(), proxyHolder.getBeanDefinition());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="MapperFactoryBean"><a href="#MapperFactoryBean" class="headerlink" title="MapperFactoryBean"></a>MapperFactoryBean</h4><p>MapperFactoryBean继承SqlSessionDaoSupport继承DaoSupport实现了InitializingBean接口，所以bean初始化的时候afterPropertiesSet会被执行，会去执行checkDaoConfig()方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> IllegalArgumentException, BeanInitializationException </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.checkDaoConfig();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.initDao();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception var2) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BeanInitializationException(<span class="string">&quot;Initialization of DAO failed&quot;</span>, var2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>让我们一起看看checkDaoConfig方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">checkDaoConfig</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">super</span>.checkDaoConfig();</span><br><span class="line"></span><br><span class="line">  notNull(<span class="keyword">this</span>.mapperInterface, <span class="string">&quot;Property &#x27;mapperInterface&#x27; is required&quot;</span>);</span><br><span class="line"></span><br><span class="line">  Configuration configuration = getSqlSession().getConfiguration();</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.addToConfig &amp;&amp; !configuration.hasMapper(<span class="keyword">this</span>.mapperInterface)) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      configuration.addMapper(<span class="keyword">this</span>.mapperInterface);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      logger.error(<span class="string">&quot;Error while adding the mapper &#x27;&quot;</span> + <span class="keyword">this</span>.mapperInterface + <span class="string">&quot;&#x27; to configuration.&quot;</span>, e);</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      ErrorContext.instance().reset();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法会将这个mapperInterface放入configuration里面，主要的是configuration.addMapper(this.mapperInterface);方法，里面调用了mapperRegistry.addMapper()方法，这个方法new了一个MapperProxyFactory代理工厂类放到了knownMappers这个Concur</p>
+<p>rentHashMap里面用来后面获取，然后会声明一个MapperAnnotationBuilder对我们的mapper对象和xml文件进行解析。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">addMapper</span><span class="params">(Class&lt;T&gt; type)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (type.isInterface()) &#123;</span><br><span class="line">          <span class="keyword">if</span> (<span class="keyword">this</span>.hasMapper(type)) &#123;</span><br><span class="line">              <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">&quot;Type &quot;</span> + type + <span class="string">&quot; is already known to the MapperRegistry.&quot;</span>);</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">boolean</span> loadCompleted = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">              <span class="keyword">this</span>.knownMappers.put(type, <span class="keyword">new</span> MapperProxyFactory(type));</span><br><span class="line">              MapperAnnotationBuilder parser = <span class="keyword">new</span> MapperAnnotationBuilder(<span class="keyword">this</span>.config, type);</span><br><span class="line">              parser.parse();</span><br><span class="line">              loadCompleted = <span class="keyword">true</span>;</span><br><span class="line">          &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">              <span class="keyword">if</span> (!loadCompleted) &#123;</span><br><span class="line">                  <span class="keyword">this</span>.knownMappers.remove(type);</span><br><span class="line">              &#125;</span><br><span class="line"></span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>以下是对于FactoryBean接口的实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> T <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> getSqlSession().getMapper(<span class="keyword">this</span>.mapperInterface);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * &#123;<span class="doctag">@inheritDoc</span>&#125;</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> Class&lt;T&gt; <span class="title">getObjectType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">this</span>.mapperInterface;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * &#123;<span class="doctag">@inheritDoc</span>&#125;</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>里面的getObject方法会去前面说的knownMappers获取MapperProxyFactory对象，这个对象又会返回一个MapperProxy对象，这个MapperProxy实现了InvocationHandler代理，最后调用了MapperMethod的execute(SqlSession sqlSession, Object[] args)方法。</p>
+<h4 id="MapperMethod"><a href="#MapperMethod" class="headerlink" title="MapperMethod"></a>MapperMethod</h4><p>MapperMethod的构造器只有一个，里面new了两个对象，其中SqlCommand主要获取name和type，MethodSignature主要对接口的参数和返回值进行解析。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MapperMethod</span><span class="params">(Class&lt;?&gt; mapperInterface, Method method, Configuration config)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.command = <span class="keyword">new</span> SqlCommand(config, mapperInterface, method);</span><br><span class="line">   <span class="keyword">this</span>.method = <span class="keyword">new</span> MethodSignature(config, mapperInterface, method);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>看一下execute方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">execute</span><span class="params">(SqlSession sqlSession, Object[] args)</span> </span>&#123;</span><br><span class="line">  Object result;</span><br><span class="line">  <span class="keyword">switch</span> (command.getType()) &#123;</span><br><span class="line">    <span class="keyword">case</span> INSERT: &#123;</span><br><span class="line">      Object param = method.convertArgsToSqlCommandParam(args);</span><br><span class="line">      result = rowCountResult(sqlSession.insert(command.getName(), param));</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">case</span> UPDATE: &#123;</span><br><span class="line">      Object param = method.convertArgsToSqlCommandParam(args);</span><br><span class="line">      result = rowCountResult(sqlSession.update(command.getName(), param));</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">case</span> DELETE: &#123;</span><br><span class="line">      Object param = method.convertArgsToSqlCommandParam(args);</span><br><span class="line">      result = rowCountResult(sqlSession.delete(command.getName(), param));</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">case</span> SELECT:</span><br><span class="line">      <span class="keyword">if</span> (method.returnsVoid() &amp;&amp; method.hasResultHandler()) &#123;</span><br><span class="line">        executeWithResultHandler(sqlSession, args);</span><br><span class="line">        result = <span class="keyword">null</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.returnsMany()) &#123;</span><br><span class="line">        result = executeForMany(sqlSession, args);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.returnsMap()) &#123;</span><br><span class="line">        result = executeForMap(sqlSession, args);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.returnsCursor()) &#123;</span><br><span class="line">        result = executeForCursor(sqlSession, args);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Object param = method.convertArgsToSqlCommandParam(args);</span><br><span class="line">        result = sqlSession.selectOne(command.getName(), param);</span><br><span class="line">        <span class="keyword">if</span> (method.returnsOptional() &amp;&amp; (result == <span class="keyword">null</span> || !method.getReturnType().equals(result.getClass()))) &#123;</span><br><span class="line">          result = Optional.ofNullable(result);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> FLUSH:</span><br><span class="line">      result = sqlSession.flushStatements();</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">&quot;Unknown execution method for: &quot;</span> + command.getName());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (result == <span class="keyword">null</span> &amp;&amp; method.getReturnType().isPrimitive() &amp;&amp; !method.returnsVoid()) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BindingException(<span class="string">&quot;Mapper method &#x27;&quot;</span> + command.getName()</span><br><span class="line">        + <span class="string">&quot;&#x27; attempted to return null from a method with a primitive return type (&quot;</span> + method.getReturnType() + <span class="string">&quot;).&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要是通过刚才获取到的type，使用sqlSession进行不同的逻辑处理，后面的逻辑是通过configuration根据statementId获取到对应的MappedStatement，然后调用不同的Executor来执行，Executor最后会生成StatementHandler来处理传进来的MappedStatement，parameter等参数，最终去执行sql，并将结果交给ResultHandler，ResultHandler对获取到的结果进行处理，至此一套mybatis的流程就到此为止了。</p>
+<p>接下来我们看看里面的一些细节。</p>
+<h3 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h3><div class="tag-plugin image"><div class="image-bg"><img src="/2023/10/20/mybatis/image-20240305155512827.png"></div></div>
+
+<p><strong>SimpleExecutor</strong>：每执行一次update或select，就开启一个Statement对象，用完立刻关闭Statement对象。<br><strong>ReuseExecutor</strong>：执行update或select，以sql作为key查找Statement对象，存在就使用，不存在就创建，用完后，不关闭Statement对象，而是放置于Map内，供下一次使用。简言之，就是重复使用Statement对象。<br><strong>BatchExecutor</strong>：执行update（没有select，JDBC批处理不支持select），将所有sql都添加到批处理中（addBatch()），等待统一执行（executeBatch()），它缓存了多个Statement对象，每个Statement对象都是addBatch()完毕后，等待逐一执行executeBatch()批处理。与JDBC批处理相同。</p>
+<p><strong>CachingExecutor</strong>：CachingExecutor是一个Executor接口的装饰器，它为Executor对象增加了二级缓存的相关功能，委托的执行器对象可以是SimpleExecutor、ReuseExecutor、BatchExecutor中任一一个。执行 update 方法前判断是否清空二级缓存；执行 query 方法前先在二级缓存中查询，命中失败再通过被代理类查询。</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><h4 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h4><p>首先一级缓存的作用域是一个sqlSession里面，sqlSession会使用Executor来做数据库的一些操作，而一级缓存就是抽象类BaseExecutor的一个成员变量，取名交作localCache。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> PerpetualCache localCache;</span><br></pre></td></tr></table></figure>
+<p>看一下PerpetualCache的变量，会发现里面是用HashMap来做的缓存。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> String id;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;Object, Object&gt; cache = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<p>首选需要初始化SqlSession</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> SqlSession <span class="title">openSessionFromDataSource</span><span class="params">(ExecutorType execType, TransactionIsolationLevel level,</span></span></span><br><span class="line"><span class="function"><span class="params">     <span class="keyword">boolean</span> autoCommit)</span> </span>&#123;</span><br><span class="line">   Transaction tx = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">     <span class="keyword">final</span> Environment environment = configuration.getEnvironment();</span><br><span class="line">     <span class="keyword">final</span> TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);</span><br><span class="line">     tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);</span><br><span class="line">     <span class="comment">// 这里会去生成一个Executor</span></span><br><span class="line">     <span class="keyword">final</span> Executor executor = configuration.newExecutor(tx, execType);</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">new</span> DefaultSqlSession(configuration, executor, autoCommit);</span><br><span class="line">   &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">     closeTransaction(tx); <span class="comment">// may have fetched a connection so lets call close()</span></span><br><span class="line">     <span class="keyword">throw</span> ExceptionFactory.wrapException(<span class="string">&quot;Error opening session.  Cause: &quot;</span> + e, e);</span><br><span class="line">   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">     ErrorContext.instance().reset();</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>初始化SqlSession的时候，他会创建一个Executor，创建的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Executor <span class="title">newExecutor</span><span class="params">(Transaction transaction, ExecutorType executorType)</span> </span>&#123;</span><br><span class="line">  executorType = executorType == <span class="keyword">null</span> ? defaultExecutorType : executorType;</span><br><span class="line">  Executor executor;</span><br><span class="line">  <span class="keyword">if</span> (ExecutorType.BATCH == executorType) &#123;</span><br><span class="line">    executor = <span class="keyword">new</span> BatchExecutor(<span class="keyword">this</span>, transaction);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ExecutorType.REUSE == executorType) &#123;</span><br><span class="line">    executor = <span class="keyword">new</span> ReuseExecutor(<span class="keyword">this</span>, transaction);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    executor = <span class="keyword">new</span> SimpleExecutor(<span class="keyword">this</span>, transaction);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 如果启用二级缓存，那么就是CachingExecutor这个</span></span><br><span class="line">  <span class="keyword">if</span> (cacheEnabled) &#123;</span><br><span class="line">    executor = <span class="keyword">new</span> CachingExecutor(executor);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> (Executor) interceptorChain.pluginAll(executor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Executor负责处理和数据库打交道，如果是select查询的话，会走到query方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">query</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">  BoundSql boundSql = ms.getBoundSql(parameter);</span><br><span class="line">  CacheKey key = createCacheKey(ms, parameter, rowBounds, boundSql);</span><br><span class="line">  <span class="keyword">return</span> query(ms, parameter, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>query方法会去创建一个CacheKey，创建过程如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> CacheKey <span class="title">createCacheKey</span><span class="params">(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (closed) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ExecutorException(<span class="string">&quot;Executor was closed.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  CacheKey cacheKey = <span class="keyword">new</span> CacheKey();</span><br><span class="line">  cacheKey.update(ms.getId());</span><br><span class="line">  cacheKey.update(rowBounds.getOffset());</span><br><span class="line">  cacheKey.update(rowBounds.getLimit());</span><br><span class="line">  cacheKey.update(boundSql.getSql());</span><br><span class="line">  List&lt;ParameterMapping&gt; parameterMappings = boundSql.getParameterMappings();</span><br><span class="line">  TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();</span><br><span class="line">  <span class="comment">// mimic DefaultParameterHandler logic</span></span><br><span class="line">  MetaObject metaObject = <span class="keyword">null</span>;</span><br><span class="line">  <span class="keyword">for</span> (ParameterMapping parameterMapping : parameterMappings) &#123;</span><br><span class="line">    <span class="keyword">if</span> (parameterMapping.getMode() != ParameterMode.OUT) &#123;</span><br><span class="line">      Object value;</span><br><span class="line">      String propertyName = parameterMapping.getProperty();</span><br><span class="line">      <span class="keyword">if</span> (boundSql.hasAdditionalParameter(propertyName)) &#123;</span><br><span class="line">        value = boundSql.getAdditionalParameter(propertyName);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (parameterObject == <span class="keyword">null</span>) &#123;</span><br><span class="line">        value = <span class="keyword">null</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) &#123;</span><br><span class="line">        value = parameterObject;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (metaObject == <span class="keyword">null</span>) &#123;</span><br><span class="line">          metaObject = configuration.newMetaObject(parameterObject);</span><br><span class="line">        &#125;</span><br><span class="line">        value = metaObject.getValue(propertyName);</span><br><span class="line">      &#125;</span><br><span class="line">      cacheKey.update(value);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (configuration.getEnvironment() != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// issue #176</span></span><br><span class="line">    cacheKey.update(configuration.getEnvironment().getId());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> cacheKey;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到CacheKey的id是通过MapperStatement的id、offset、limit、sql还有参数来决定的。</p>
+<p>继续往下走会发现使用缓存的地方，如果存在缓存就直接使用缓存，否则就使用queryFromDatabase方法去数据库进行查询。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">list = resultHandler == <span class="keyword">null</span> ? (List&lt;E&gt;) localCache.getObject(key) : <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span> (list != <span class="keyword">null</span>) &#123;</span><br><span class="line">  handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并且在query方法的最后，如果开起了二级缓存，则清空一级缓存的数据。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (configuration.getLocalCacheScope() == LocalCacheScope.STATEMENT) &#123;</span><br><span class="line">     <span class="comment">// issue #482</span></span><br><span class="line">     clearLocalCache();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>queryFromDatabase方法里面对一级缓存做了操作，将doQuery的查询结果放入一级缓存里面，如果doQuery报错了，还是会remove掉一级缓存的数据。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">queryFromDatabase</span><span class="params">(MappedStatement ms, Object parameter, RowBounds rowBounds,</span></span></span><br><span class="line"><span class="function"><span class="params">    ResultHandler resultHandler, CacheKey key, BoundSql boundSql)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">  List&lt;E&gt; list;</span><br><span class="line">  localCache.putObject(key, EXECUTION_PLACEHOLDER);</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    list = doQuery(ms, parameter, rowBounds, resultHandler, boundSql);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    localCache.removeObject(key);</span><br><span class="line">  &#125;</span><br><span class="line">  localCache.putObject(key, list);</span><br><span class="line">  <span class="keyword">if</span> (ms.getStatementType() == StatementType.CALLABLE) &#123;</span><br><span class="line">    localOutputParameterCache.putObject(key, parameter);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就是一级缓存的查询逻辑，那么如果是insert、delete、update呢？</p>
+<p>在进行insert、delete、update的时候，最终都会走到Executor的update方法，而这个方法里面都会在提交sql之前执行clearLocalCache()方法来清理一级缓存的内容。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">update</span><span class="params">(MappedStatement ms, Object parameter)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">   ErrorContext.instance().resource(ms.getResource()).activity(<span class="string">&quot;executing an update&quot;</span>).object(ms.getId());</span><br><span class="line">   <span class="keyword">if</span> (closed) &#123;</span><br><span class="line">     <span class="keyword">throw</span> <span class="keyword">new</span> ExecutorException(<span class="string">&quot;Executor was closed.&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   clearLocalCache();</span><br><span class="line">   <span class="keyword">return</span> doUpdate(ms, parameter);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h4><p>开启二级缓存</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">setting</span> <span class="attr">name</span>=<span class="string">&quot;cacheEnabled&quot;</span> <span class="attr">value</span>=<span class="string">&quot;true&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>二级缓存主要是类CachingExecutor，在前面说到创建Executor的时候，当开启二级缓存的时候CachingExecutor对平常的Executor做了一个封装。</p>
+<p>看一下他的query方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">query</span><span class="params">(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler,</span></span></span><br><span class="line"><span class="function"><span class="params">      CacheKey key, BoundSql boundSql)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    Cache cache = ms.getCache();</span><br><span class="line">    <span class="keyword">if</span> (cache != <span class="keyword">null</span>) &#123;</span><br><span class="line">      flushCacheIfRequired(ms);</span><br><span class="line">      <span class="keyword">if</span> (ms.isUseCache() &amp;&amp; resultHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">        ensureNoOutParams(ms, boundSql);</span><br><span class="line">        <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">        List&lt;E&gt; list = (List&lt;E&gt;) tcm.getObject(cache, key);</span><br><span class="line">        <span class="keyword">if</span> (list == <span class="keyword">null</span>) &#123;</span><br><span class="line">          list = delegate.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">          tcm.putObject(cache, key, list); <span class="comment">// issue #578 and #116</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> delegate.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>首先会从MappedStatement里面获取Cache，这个Cache是链式结构，里面有很多的Cache实现，拥有不同的逻辑实现。</p>
+<ul>
+<li>  <code>SynchronizedCache</code>：同步Cache，实现比较简单，直接使用synchronized修饰方法。</li>
+<li>  <code>LoggingCache</code>：日志功能，装饰类，用于记录缓存的命中率，如果开启了DEBUG模式，则会输出命中率日志。</li>
+<li>  <code>SerializedCache</code>：序列化功能，将值序列化后存到缓存中。该功能用于缓存返回一份实例的Copy，用于保存线程安全。</li>
+<li>  <code>LruCache</code>：采用了Lru算法的Cache实现，移除最近最少使用的Key/Value。</li>
+<li>  <code>PerpetualCache</code>： 作为为最基础的缓存类，底层实现比较简单，直接使用了HashMap。</li>
+</ul>
+<p>具体的详细解析可以参考<a target="_blank" rel="noopener" href="https://tech.meituan.com/2018/01/19/mybatis-cache.html">美团</a>的文档。</p>
+<p>参考链接</p>
+<p><a href>Mybatis都有哪些Executor执行器？它们之间的区别是什么？</a></p>
+<p><a target="_blank" rel="noopener" href="https://tech.meituan.com/2018/01/19/mybatis-cache.html">聊聊MyBatis缓存机制</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://fireflyingup.github.io/2023/10/20/mybatis/" title="mybatis" target="_blank" rel="external">http://fireflyingup.github.io/2023/10/20/mybatis/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/fireflyingup" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/fireflyingup" target="_blank"><span class="text-dark">fireflying</span><small class="ml-1x">Java Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/12/28/cloud/" title="cloud"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/04/28/algorithm/" title="算法与数据结构"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/fireflyingup" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
